@@ -55,6 +55,7 @@ const Dashboard = () => {
     }
 
     const handleRouteCreate = (event) => {
+        setCreateIsOpen(false)
         event.preventDefault();
         const data = {
             from: routeDetail.toLocation,
@@ -62,7 +63,7 @@ const Dashboard = () => {
             money: routeDetail.amount,
             driverId: user?.id
         }
-        axios.post(`https://lanka-cabs.onrender.com/create-new-route-for-driver`, data, {
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/create-new-route-for-driver`, data, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: 'application/json'
@@ -75,7 +76,7 @@ const Dashboard = () => {
             })
             .catch(err => {
                 console.log(err)
-                showErrorMessage()
+                showErrorMessage(err.response.data.error)
             })
     }
 
@@ -103,7 +104,7 @@ const Dashboard = () => {
 
     const getProtectedData = async (accessToken) => {
         try {
-            const response = await axios.get('https://lanka-cabs.onrender.com/protected', {
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/protected`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json'
@@ -145,7 +146,7 @@ const Dashboard = () => {
 
     const GetBookings = async (endPoint) => {
         try {
-            const response = await axios.get(`https://lanka-cabs.onrender.com/${endPoint}`, {
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/${endPoint}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json'
@@ -187,6 +188,7 @@ const Dashboard = () => {
             Customer,
             Driver
         })
+        setViewIsOpen(true);
     }
 
     const renderStars = (numStars) => {
@@ -206,7 +208,7 @@ const Dashboard = () => {
         const driverId = id
         const ratingNum = num
 
-        axios.patch(`https://lanka-cabs.onrender.com/update-driver-rating`, { driverId, ratingNum }, {
+        axios.patch(`${process.env.REACT_APP_SERVER_URL}/update-driver-rating`, { driverId, ratingNum }, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: 'application/json'
@@ -224,7 +226,7 @@ const Dashboard = () => {
     }
 
     const handleConfirm = (id) => {
-        axios.patch(`https://lanka-cabs.onrender.com/confirm-booking/${id}`, { id }, {
+        axios.patch(`${process.env.REACT_APP_SERVER_URL}/confirm-booking/${id}`, { id }, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: 'application/json'
@@ -242,7 +244,7 @@ const Dashboard = () => {
     }
 
     const handleChangeAvailability = (driverId) => {
-        axios.patch(`https://lanka-cabs.onrender.com/changing-availability-driver`, { driverId }, {
+        axios.patch(`${process.env.REACT_APP_SERVER_URL}/changing-availability-driver`, { driverId }, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: 'application/json'
@@ -255,13 +257,13 @@ const Dashboard = () => {
             })
             .catch(err => {
                 console.log(err)
-                showErrorMessage()
+                showErrorMessage(err.response.data.error)
             })
     }
 
     useEffect(() => {
         if (token) {
-            axios.get(`https://lanka-cabs.onrender.com/all-users`, {
+            axios.get(`${process.env.REACT_APP_SERVER_URL}/all-users`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json'
@@ -285,7 +287,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (user?.role === "Driver") {
-            axios.get(`https://lanka-cabs.onrender.com/all-routes-driver/${user?.id}`, {
+            axios.get(`${process.env.REACT_APP_SERVER_URL}/all-routes-driver/${user?.id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json'
@@ -347,6 +349,8 @@ const Dashboard = () => {
                                 <div className="col-sm-12 login-form-area">
                                     <div className="">
                                         <h4 className='text-center mb-4'>PROFILE</h4>
+                                        {/* <button className='text-center mb-4'
+                                        onClick={()=>navigate(-1)}>back</button> */}
                                         <hr />
                                         <div className="row">
                                             <div className="col-sm-12 col-lg-4 d-flex align-items-center justify-content-center">
@@ -466,7 +470,7 @@ const Dashboard = () => {
                                                                                         <span className={`booking-status ${book?.bookingDetails?.status == "Completed" ? "completed" : "pending"}`}>{book?.bookingDetails?.status}</span>
                                                                                     </td>
                                                                                     <td className='text-center'>
-                                                                                        <button className='btn view-btn' data-toggle="modal" data-target="#exampleModal"
+                                                                                        <button className='btn view-btn' 
                                                                                             onClick={() => handleBookingUser(cusDetail, driverDeta)}
                                                                                         >
                                                                                             <i className='fa fa-eye'></i>
@@ -581,7 +585,9 @@ const Dashboard = () => {
                                         <div className="">
                                             <div className="d-flex align-items-center justify-content-between mb-3">
                                                 <h4 className='text-center mb-0'>ROUTE CHARGES</h4>
-                                                <button className='btn btn-sm btn-success' data-toggle="modal" data-target="#routeCharegeModal">
+                                                <button className='btn btn-sm btn-success' 
+                                                onClick={()=>setCreateIsOpen(true)}
+                                                >
                                                     <i className='fa fa-plus mr-2'></i>
                                                     Create New
                                                 </button>

@@ -4,11 +4,13 @@ const fromToMoneySchema = new Schema(
   { 
     from: {
       type: String,
-      required: true
+      required: true,
+      lowercase: true  // Store values in lowercase
     },
     to: {
       type: String,
-      required: true
+      required: true,
+      lowercase: true  // Store values in lowercase
     },
     money: {
       type: String,

@@ -8,6 +8,7 @@ const {
     routeDetail,
     getAllCreatedFrom,
     getAllCreatedTo,
+    findAlreadyBooking,
     createBooking,
     getAllBookings,
     confirmBooking,
@@ -69,6 +70,9 @@ router.get("/find-from-routes", getAllCreatedFrom );
 
 //find all the to routes
 router.get("/find-to-routes", getAllCreatedTo );
+
+//find already book
+router.post("/already-booked", employeeAuth, findAlreadyBooking);
 
 //create booking 
 router.post("/create-new-booking", employeeAuth, createBooking);

@@ -4,8 +4,10 @@ import { Footer } from '../../components/Footer';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.css';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+    const navigate = useNavigate();
     const intialCredentials = {
         email: "",
         phoneNum: 0,
@@ -42,16 +44,18 @@ const Register = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(credentials)
-
-        axios.post(`https://lanka-cabs.onrender.com/user-reg`, credentials)
+        console.log(process.env.REACT_APP_SERVER_URL)
+        
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/user-reg`, credentials)
             .then(res => {
                 console.log(res.data);
                 showSuccessMessage("Find your Login Credentials in your email")
-                setCredentials({ ...credentials, email: "", phoneNum: "" });
+                setCredentials({ ...credentials, email: "", phoneNum: 0 });
+                navigate("/log-in")
             })
             .catch(err => {
                 console.log(err)
-                showErrorMessage("Register failed!")
+                showErrorMessage(err.response.data.error)
             })
 
     }

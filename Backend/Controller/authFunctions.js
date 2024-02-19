@@ -136,10 +136,14 @@ const bookingDetail = require("../dataBase/bookingDetail");
 const createCustomer = async (req, res) => {
     try {
         const { email, role, phoneNum } = req.body;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailRegex.test(email) || phoneNum === 0){
+           return res.status(500).json({error:"enter valid email and phn num"});
+        }
         const userExists = await registerUser.findOne({ $or: [{ email }, { phoneNum }] });
         
         if (userExists) {
-            throw new Error("User already exists with this email or phone number");
+           return  res.status(404).json({error:"User already exists with this email or phone number"});
         }
 
         // Generate a random username
@@ -244,7 +248,7 @@ const createCustomer = async (req, res) => {
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
                 console.error('Email sending error:', error);
-                throw new Error('Failed to send email');
+                res.status(500).json({error:'Failed to send email'});
             } else {
                 console.log('Email sent:', info.response);
                 res.status(201).json({ newUser: newUser, emailSent: true });
@@ -262,6 +266,12 @@ const userLogin = async (req, role, res) => {
     try {
         // Destructure username and password from request body
         const { userName, password } = req;
+
+        if (!userName || !password) {
+            return res.status(400).json({
+                message: "Invalid input. Please provide both username and password.",
+            });
+        }
 
         // Check if username or password is missing
         if (!userName || !password) {
@@ -368,7 +378,9 @@ const findAllUsersForAdmin = async (req, res) => {
 /* adding from to route money */
 const fromToRouteMoneyAdd = async(req, res) => {
     try{
-        const {from, to, money, driverId} = req.body;
+        let {from, to, money, driverId} = req.body;
+        from = from.toLowerCase()
+        to = to.toLowerCase()
         const alreadyCreated = await fromToMoney.findOne({from:from, to:to, money:money, driverId:driverId});
         if(alreadyCreated){
             return res.status(400).json({error:"Already this route there for this driverId"});
@@ -412,7 +424,9 @@ const findAllDrivers= async (req, res) => {
 /* get route detail by customer */
 const routeDetail = async (req, res) => {
     try {
-        const { from, to } = req.params;
+        let { from, to } = req.params;
+        from = from.toLowerCase();  // Convert to lowercase
+        to = to.toLowerCase();  // Convert to lowercase
         const correspondingFromToDetail = await fromToMoney.find({ from, to });
 
         if (correspondingFromToDetail.length === 0) {
@@ -489,13 +503,37 @@ const getAllCreatedTo = async (req, res) => {
     }
 };
 
+const findAlreadyBooking = async(req, res) => {
+    try{
+        let {from, to, driverId, customerId} = req.body;
+        from = from.toLowerCase()
+        to = to.toLowerCase()
+        const bookingFound = await bookingDetail.findOne({from, to, driverId, customerId, status:"Pending"});
+        console.log(bookingFound)
+        if(bookingFound){
+            res.status(200).json({message:"Already Booked"})
+        }else{
+            res.status(200).json({message:"Not Booked"})
+        }
+    }catch (err) {
+        // Handle any errors that occur during the process
+        return res.status(500).json({ error: err.message });
+    }
+}
+
 /* create booking detail */
 const createBooking = async (req, res) => {
     try {
         const bookingId = uuidv4();
         // const bookingTime = moment().format('hh:mmA'); // Format time as "10:15PM"
         // const bookingDate = moment().format('DD/MM/YYYY'); // Format date as "dd/mm/yyyy"
-        const { driverId, customerId, from, to, money, pickUpLocation, time, date} = req.body;
+        let { driverId, customerId, from, to, money, pickUpLocation, time, date} = req.body;
+        from = from.toLowerCase()
+        to = to.toLowerCase()
+        const alreadyBookedWithStatusPending = await bookingDetail.findOne({from, to, driverId, customerId, status:"Pending"})
+        if(alreadyBookedWithStatusPending){
+            return res.status(500).json({error:"You have already booked this driver, and the trip is not finished yet."})
+        }
         const newBookingDetail = new bookingDetail({
             id:bookingId,
             driverId,
@@ -729,6 +767,7 @@ module.exports = {
     routeDetail,
     getAllCreatedFrom,
     getAllCreatedTo,
+    findAlreadyBooking,
     createBooking,
     getAllBookings,
     confirmBooking,

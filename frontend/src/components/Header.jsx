@@ -13,7 +13,7 @@ export const Header = () => {
 
     const getProtectedData = async (accessToken) => {
         try {
-            const response = await axios.get('https://lanka-cabs.onrender.com/protected', {
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/protected`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json'

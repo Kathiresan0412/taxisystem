@@ -8,6 +8,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.css';
 
 const customStyles = {
     content: {
@@ -21,6 +23,7 @@ const customStyles = {
 };
 
 const Home = () => {
+    // window.location.reload()
     const navigate = useNavigate();
     const [token, setToken] = useState("");
     const [user, setUser] = useState();
@@ -35,6 +38,7 @@ const Home = () => {
     const [selectedToLocation, setSelectedToLocation] = useState('');
 
     const [routeDetail, setRouteDetail] = useState([]);
+    const [searching, setSearching] = useState(true);
     const [showDateAndTime, setShowDateAndTime] = useState(false);
 
     const [extractedDate, setExtractedDate] = useState('');
@@ -45,12 +49,34 @@ const Home = () => {
     const [driverId, setDriverId] = useState("");
     const [money, setMoney] = useState("");
     const [selectedRowIndex, setSelectedRowIndex] = useState(null);
-
+    const [bookingButtonStatus, setBookingButtonStatus] = useState(false);
     const [modalIsOpen, setIsOpen] = React.useState(false);
 
     const handleChange = date => {
         setSelectedDate(date);
     };
+
+    //for show success message for payment
+    function showSuccessMessage(message) {
+        Swal.fire({
+            title: 'Success',
+            text: message,
+            icon: 'success',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
+    }
+
+    //for show error message for payment
+    function showErrorMessage(message) {
+        Swal.fire({
+            title: 'Error!',
+            text: message,
+            icon: 'error',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'OK',
+        });
+    }
 
     function smoothScroll(target) {
         const targetElement = document.getElementById(target);
@@ -64,7 +90,7 @@ const Home = () => {
 
     const getProtectedData = async (accessToken) => {
         try {
-            const response = await axios.get('https://lanka-cabs.onrender.com/protected', {
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/protected`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json'
@@ -75,6 +101,10 @@ const Home = () => {
             throw error;
         }
     };
+
+    // setTimeout(() => {
+    //     window.location.reload(true);
+    // }, 1000);
 
     useEffect(() => {
         const storedToken = JSON.parse(localStorage.getItem('token'));
@@ -152,7 +182,7 @@ const Home = () => {
 
     useEffect(() => {
 
-        axios.get("https://lanka-cabs.onrender.com/find-from-routes")
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/find-from-routes`)
             .then(res => {
                 console.log(res.data)
                 setFromLocations(res.data);
@@ -161,7 +191,7 @@ const Home = () => {
                 console.log(err)
             })
 
-        axios.get("https://lanka-cabs.onrender.com/find-to-routes")
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/find-to-routes`)
             .then(res => {
                 console.log(res.data)
                 setToLocations(res.data);
@@ -173,16 +203,18 @@ const Home = () => {
     }, [])
 
     const handleRouteDetail = () => {
+        setSearching(true)
         setRouteDetail([])
         setIsOpen(true);
-        axios.get(`https://lanka-cabs.onrender.com/route-detail/${selectedLocation}/${selectedToLocation}`)
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/route-detail/${selectedLocation}/${selectedToLocation}`)
             .then(res => {
                 console.log(res.data);
                 setRouteDetail(res.data);
-
+                setSearching(false)
             })
             .catch(err => {
                 console.log(err)
+                setSearching(false)
             })
     }
 
@@ -205,6 +237,33 @@ const Home = () => {
         return stars;
     };
 
+    useEffect(()=>{
+        if(driverId){
+            setBookingButtonStatus(false);
+            console.log(driverId)
+            axios.post(`${process.env.REACT_APP_SERVER_URL}/already-booked`, {from:selectedLocation, to:selectedToLocation, driverId, customerId:user?.id}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: 'application/json'
+                }
+            })
+                .then(res=>{
+                    console.log(res.data);
+                    if(res.data.message === "Already Booked"){
+                        setBookingButtonStatus(false);
+                       showErrorMessage("You have already booked this driver, and the trip is not finished yet.")
+                    }else if(res.data.message === "Not Booked"){
+                        setBookingButtonStatus(true);
+                    }
+                })
+                .catch(err=>{
+                    console.log(err)
+                    showErrorMessage(err.response.data.error)
+                    setBookingButtonStatus(false);
+                })
+            }
+    },[driverId]);
+
     const handleBooking = () => {
         const bookingData = {
             driverId,
@@ -218,7 +277,7 @@ const Home = () => {
 
         }
 
-        axios.post("https://lanka-cabs.onrender.com/create-new-booking", bookingData, {
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/create-new-booking`, bookingData, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: 'application/json'
@@ -226,13 +285,22 @@ const Home = () => {
         })
             .then(res => {
                 console.log(res.data);
+                showSuccessMessage("Booking Notification sent to Driver");
             })
             .catch(err => {
                 console.log(err)
+                showErrorMessage(err.response.data.error)
             })
 
     }
-
+    useEffect(()=>{
+        if(!modalIsOpen){
+            setDriverId("")
+            setShowDateAndTime(false)
+            setSelectedRowIndex(null)
+            setBookingButtonStatus(false)
+        }
+    },[modalIsOpen])
     return (
         <>
             <Layout />
@@ -532,7 +600,7 @@ const Home = () => {
                                                                 }}
                                                                 disabled={selectedRowIndex === index}
                                                             >
-                                                                <i className='fa fa-check mr-2'>&nbsp;Select</i>
+                                                                <i className='fa fa-check mr-2'>&nbsp;{selectedRowIndex === index ? "Selected" : "Select"}</i>
                                                             </button>
                                                         </td>
                                                     }
@@ -540,7 +608,7 @@ const Home = () => {
                                             ))}
                                         </tbody> :
                                         <tr>
-                                            <td colSpan={6} className='text-center text-secondary'>No Driver Details!</td>
+                                            <td colSpan={6} className='text-center text-secondary'>{searching ? "Searching..." : "No Driver Details!"}</td>
                                         </tr>
                                     }
                                 </table>
@@ -591,7 +659,7 @@ const Home = () => {
                     {user?.role === "Customer" &&
                         <button type="button" class="btn btn-orange modal-btn"
                             onClick={() => handleBooking()}
-                            disabled={routeDetail.length === 0}>Book</button>
+                            disabled={routeDetail.length === 0 || selectedDate === null || pickUpLocation === "" || !bookingButtonStatus || !showDateAndTime}>Book</button>
                     }
                 </div>
             </Modal>

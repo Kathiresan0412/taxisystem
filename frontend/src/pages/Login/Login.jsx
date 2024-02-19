@@ -58,25 +58,29 @@ const Login = () => {
         }
 
         console.log(endPoint);
-
-        axios.post(`https://lanka-cabs.onrender.com/${endPoint}`, credentials)
-            .then(res => {
-                console.log(res.data);
-                showSuccessMessage("Login Successful!")
-                setCredentials(intialCredentials);
-                if (credentials.role === "Customer") {
-                    localStorage.setItem("token", JSON.stringify(res.data.accessToken));
-                    navigate(`/`);
-                } else {
-                    localStorage.setItem("token", JSON.stringify(res.data.accessToken));
-                    navigate(`/dashboard`);
-                }
-            })
-            .catch(err => {
-                console.log(err)
-                showErrorMessage("Login failed!")
-            })
-
+        if(!(credentials.role === "")){
+            axios.post(`${process.env.REACT_APP_SERVER_URL}/${endPoint}`, credentials)
+                .then(res => {
+                    console.log(res.data);
+                    showSuccessMessage("Login Successful!")
+                    setCredentials(intialCredentials);
+                    if (credentials.role === "Customer") {
+                        localStorage.setItem("token", JSON.stringify(res.data.accessToken));
+                        // navigate(`/about`);
+                        window.location.href = "/"
+                    } else {
+                        localStorage.setItem("token", JSON.stringify(res.data.accessToken));
+                        // navigate(`/dashboard`);
+                        window.location.href = "/dashboard"
+                    }
+                })
+                .catch(err => {
+                    console.log(err)
+                    showErrorMessage(err.response.data.message)
+                })
+            }else{
+                showErrorMessage("Select User Role")
+            }
     }
 
     return (
@@ -137,7 +141,7 @@ const Login = () => {
                                     <hr className='lg custom-hr-margin' />
                                     <div className="form-group">
                                         <label className='log-label'>User Name</label>
-                                        <input type="text" name="user_name" placeholder="Enter your user name"
+                                        <input type="text" name="userName" placeholder="Enter your user name"
                                             value={credentials.userName}
                                             onChange={handleInputChange} />
                                     </div>
