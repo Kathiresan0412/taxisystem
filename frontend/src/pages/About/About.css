@@ -1,0 +1,50 @@
+.sub-about-area {
+    height: 300px;
+    background-color: #ffffff;
+    border-bottom: 4px solid #FFC61A;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+    transition: ease-in-out 0.5s;
+    border-radius: 20px;
+    box-shadow: 0px 0px 15px #00000023;
+}
+
+.sub-about-area h3 {
+    color: #FFC61A;
+    text-align: center;
+    margin: auto !important;
+}
+
+.sub-about-area h6 {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 16px;
+    transition: ease-in-out 0.5s;
+}
+
+.sub-about-area p {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+    color: #383838;
+    font-weight: 400;
+    transition: ease-in-out 0.5s;
+}
+
+.sub-about-area:hover {
+    background-color: #272727 !important;
+    transform: translateY(-5px);
+}
+
+.sub-about-area:hover .custom-hr{
+    background-color: #181818 !important;
+}
+
+.sub-about-area:hover h6,
+.sub-about-area:hover p {
+    color: #b8b8b8 !important;
+}
