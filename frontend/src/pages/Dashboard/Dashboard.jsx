@@ -58,8 +58,8 @@ const Dashboard = () => {
         setCreateIsOpen(false)
         event.preventDefault();
         const data = {
-            from: routeDetail.toLocation,
-            to: routeDetail.fromLocation,
+            from: routeDetail.fromLocation,
+            to: routeDetail.toLocation,
             money: routeDetail.amount,
             driverId: user?.id
         }
@@ -72,7 +72,10 @@ const Dashboard = () => {
             .then(res => {
                 console.log(res.data)
                 showSuccessMessage("New Route Created")
-                window.location.reload()
+                setTimeout(()=>{
+                    window.location.reload()
+                },3000)
+                
             })
             .catch(err => {
                 console.log(err)
@@ -217,30 +220,78 @@ const Dashboard = () => {
             .then(res => {
                 console.log(res.data)
                 showSuccessMessage("Rating Sent");
-                window.location.reload()
+                setTimeout(()=>{
+                    window.location.reload()
+                },3000)
             })
             .catch(err => {
                 console.log(err)
-                showErrorMessage();
+                showErrorMessage(err.response.data.error);
             })
     }
 
     const handleConfirm = (id) => {
-        axios.patch(`${process.env.REACT_APP_SERVER_URL}/confirm-booking/${id}`, { id }, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: 'application/json'
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Confirm the Booking!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+            axios.patch(`${process.env.REACT_APP_SERVER_URL}/confirm-booking/${id}`, { id }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: 'application/json'
+                }
+            })
+                .then(res => {
+                    console.log(res.data)
+                    showSuccessMessage("Booking confirmed")
+                    setTimeout(()=>{
+                        window.location.reload()
+                    },3000)
+                })
+                .catch(err => {
+                    console.log(err)
+                    showErrorMessage(err.response.data.error);
+                })
             }
-        })
-            .then(res => {
-                console.log(res.data)
-                showSuccessMessage("Booking confirmed")
-                window.location.reload()
+        });
+    }
+
+    const handleReject = (id) => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You won\'t be able to revert this!',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Reject the Booking!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+            axios.patch(`${process.env.REACT_APP_SERVER_URL}/reject-booking/${id}`, { id }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: 'application/json'
+                }
             })
-            .catch(err => {
-                console.log(err)
-                showErrorMessage()
-            })
+                .then(res => {
+                    console.log(res.data)
+                    showSuccessMessage("Booking rejected!")
+                    setTimeout(()=>{
+                        window.location.reload()
+                    },3000)
+                })
+                .catch(err => {
+                    console.log(err)
+                    showErrorMessage(err.response.data.error);
+                })
+            }
+        });
     }
 
     const handleChangeAvailability = (driverId) => {
@@ -253,7 +304,9 @@ const Dashboard = () => {
             .then(res => {
                 console.log(res.data)
                 showSuccessMessage("Availability Status Changed")
-                window.location.reload()
+                setTimeout(()=>{
+                    window.location.reload()
+                },3000)
             })
             .catch(err => {
                 console.log(err)
@@ -477,10 +530,17 @@ const Dashboard = () => {
                                                                                         </button>
 
                                                                                         {(user?.role === "Driver" && book?.bookingDetails?.status == "Pending") &&
-                                                                                            <button className='btn view-btn btn-success ml-2'
-                                                                                                onClick={() => handleConfirm(book?.bookingDetails?.id)}>
-                                                                                                Confirm
-                                                                                            </button>
+                                                                                            <>
+                                                                                                <button className='btn view-btn btn-success ml-2'
+                                                                                                    onClick={() => handleConfirm(book?.bookingDetails?.id)}>
+                                                                                                    Confirm
+                                                                                                </button>
+                                                                                                <button className='btn view-btn btn-success ml-2'
+                                                                                                    onClick={() => handleReject(book?.bookingDetails?.id)}
+                                                                                                    >
+                                                                                                    Reject
+                                                                                                </button>
+                                                                                            </>
                                                                                         }
                                                                                     </td>
                                                                                 </tr>
@@ -502,7 +562,7 @@ const Dashboard = () => {
                                         </div>
                                     </div>}
 
-                                {(user?.role === "Admin" && allUsers?.length > 0) &&
+                                {(user?.role === "Admin" ) &&
                                     <div className="col-sm-12 login-form-area mt-4">
                                         <div className="">
                                             <h4 className='text-center mb-4'>USERS</h4>
@@ -522,7 +582,7 @@ const Dashboard = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="row">
+                                            {allUsers?.length>0 && <div className="row">
                                                 <div className="col-sm-12">
 
                                                     <div class="inner-two-col">
@@ -575,10 +635,15 @@ const Dashboard = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>}
                                         </div>
+                                    </div> }
+                                    {(user?.role === "Admin" && allUsers?.length===0) && <div className="no-data-created-area">
+                                    <div className='no-data-created'>
+                                        <div className='no-data-text'>No {selecteValue} Found!</div>
                                     </div>
-                                }
+                                </div>}
+                                
 
                                 {(user.role === "Driver") &&
                                     <div className="col-sm-12 login-form-area mt-4">

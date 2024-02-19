@@ -37,7 +37,7 @@ const bookingDetailSchema = new Schema(
     status: {
       type: String,
       required: true,
-      enum: ['Pending', "Completed"]
+      enum: ['Pending', "Completed", "Rejected"]
     },
     pickUpLocation: {
       type: String,

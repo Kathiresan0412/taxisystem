@@ -596,6 +596,10 @@ const confirmBooking = async (req, res) => {
         if (findTheBooking.status === "Completed") {
             return res.status(400).json({ error: "This Booking is already completed!" });
         }
+
+        if (findTheBooking.status === "Rejected") {
+            return res.status(400).json({ error: "This Booking is already rejected!" });
+        }
         
         // Update booking status to Completed
         const updatedBooking = await bookingDetail.findOneAndUpdate(
@@ -630,6 +634,63 @@ const confirmBooking = async (req, res) => {
         
         // Respond with updated document
         return res.status(200).json({ message: "Booking confirmed successfully!", updatedBooking });
+    } catch (err) {
+        // Handle any errors that occur during the process
+        return res.status(500).json({ error: err.message });
+    }
+};
+
+/* reject the booking */
+const rejectBooking = async (req, res) => {
+    try {
+        const { bookingId } = req.params;
+        const findTheBooking = await bookingDetail.findOne({ id: bookingId });
+        
+        if (!findTheBooking) {
+            return res.status(404).json({ error: "Booking not found!" });
+        }
+        
+        if (findTheBooking.status === "Completed") {
+            return res.status(400).json({ error: "This Booking is already completed!" });
+        }
+
+        if (findTheBooking.status === "Rejected") {
+            return res.status(400).json({ error: "This Booking is already rejected!" });
+        }
+        
+        // Update booking status to Completed
+        const updatedBooking = await bookingDetail.findOneAndUpdate(
+            { id: bookingId },
+            { $set: { status: "Rejected" } },
+            { new: true }
+        );
+
+        const bookingCustomerDetail = await customer.findOne({ id: findTheBooking.customerId });
+        
+        // Send email to the customer with confirmation
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'demoemail1322@gmail.com',
+                pass: 'znsdgrmwzskpatwz'
+            }
+        });
+
+        const mailOptions = {
+            from: 'demoemail1322@gmail.com',
+            to: bookingCustomerDetail.email,
+            subject: 'Sorry, Your Booking Rejected!',
+            html: `
+            <p>Sorry, Your Booking has been rejected!</p>
+            <p>Booking ID: ${updatedBooking.id}</p>
+            <p>Status: ${updatedBooking.status}</p>
+            `
+        };
+
+        await transporter.sendMail(mailOptions);
+        
+        // Respond with updated document
+        return res.status(200).json({ message: "Booking Rejected!", updatedBooking });
     } catch (err) {
         // Handle any errors that occur during the process
         return res.status(500).json({ error: err.message });
@@ -758,6 +819,56 @@ const getAllRoutesForDriver = async (req, res) => {
     }
 };
 
+/* edit route detail */
+const editRoute = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const routeToBeEdited = await fromToMoney.findById(id);
+        if(!routeToBeEdited){
+            return res.status(404).json({error:"Route detail not found!"})
+        }
+        const updatedRouteDetail = await fromToMoney.findByIdAndUpdate(
+            { _id:id },
+            {
+              $set: {
+                from:req.body.from.toLowerCase(),
+                to:req.body.to.toLowerCase(),
+                money:req.body.money,
+              },
+            },
+            { new: true }
+          );
+          return res.status(200).json({ updatedRouteDetail });
+    } catch (err) {
+        // Handle any errors that occur during the process
+        return res.status(500).json({ error: err.message });
+    }
+};
+
+/* delete route detail */
+const deleteRoute = async (req, res) => {
+    try{
+        const {id} = req.params;
+        const routeToBeDeleted = await fromToMoney.findById(id);
+    
+        if (!routeToBeDeleted) {
+          return res.status(404).json({ error: 'Route detail not found!' });
+        }
+    
+        const deletedRouteDetail = await fromToMoney.deleteOne({_id:id});
+    
+        if (deletedRouteDetail.deletedCount === 1) {
+          return res.status(204).json({ message: 'Route detail deleted successfully' });
+        } else {
+          return res.status(500).json({ error: 'Failed to delete' });
+        } 
+        
+      }catch(err) {
+        res.status(500).json({error: err.message})
+      }
+};
+
+
 module.exports = {
     createCustomer,
     userLogin,
@@ -771,9 +882,12 @@ module.exports = {
     createBooking,
     getAllBookings,
     confirmBooking,
+    rejectBooking,
     getAllBookingsCustomer,
     giveRating,
     changingAvailability,
     getAllBookingsForAdmin,
     getAllRoutesForDriver,
+    editRoute,
+    deleteRoute,
 }

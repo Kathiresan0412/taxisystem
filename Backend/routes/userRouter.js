@@ -12,11 +12,14 @@ const {
     createBooking,
     getAllBookings,
     confirmBooking,
+    rejectBooking,
     getAllBookingsCustomer,
     giveRating,
     changingAvailability,
     getAllBookingsForAdmin,
     getAllRoutesForDriver,
+    editRoute,
+    deleteRoute,
 
 } = require("../Controller/authFunctions");
 const driver = require("../dataBase/driver");
@@ -83,6 +86,9 @@ router.get("/booking/:driverId", employeeAuth, getAllBookings);
 //confirm the booking
 router.patch("/confirm-booking/:bookingId", employeeAuth, confirmBooking);
 
+//reject the booking
+router.patch("/reject-booking/:bookingId", employeeAuth, rejectBooking);
+
 //find all booking of customerId
 router.get("/bookings-customer/:customerId", employeeAuth, getAllBookingsCustomer);
 
@@ -97,5 +103,11 @@ router.get("/all-bookings-with-customer-driver-details", employeeAuth, getAllBoo
 
 //get all routes for driver
 router.get("/all-routes-driver/:driverId", employeeAuth, getAllRoutesForDriver);
+
+//edit route detail
+router.patch("/edit-route/:id", employeeAuth, editRoute);
+
+//delete route detail
+router.patch("/delete-route/:id", employeeAuth, deleteRoute);
 
 module.exports = router;

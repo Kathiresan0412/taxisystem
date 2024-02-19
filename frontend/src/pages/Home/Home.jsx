@@ -653,7 +653,10 @@ const Home = () => {
                 <div className="modal--footer">
                     {!(user?.role === "Customer") &&
                         <button class="btn btn-orange with-border modal-btn"
-                            onClick={() => navigate("/log-in")}>Please Login as Customer to Book....</button>
+                            onClick={() => {
+                                localStorage.removeItem("token")
+                                navigate("/log-in")
+                            }}>Please Login as Customer to Book....</button>
                     }
                     <button type="button" class="btn btn-secondary modal-btn" onClick={closeModal}>Close</button>
                     {user?.role === "Customer" &&
