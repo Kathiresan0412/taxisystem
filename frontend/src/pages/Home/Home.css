@@ -165,6 +165,20 @@
     color: #8c8c8c !important;
 }
 
+.form-control.light-theme {
+    width: 100% !important;
+    border-radius: 10px !important;
+    background-color: #f6f6f6;
+    border: 1px solid #FFC61A !important;
+    color: #474747 !important;
+    padding: 10px 16px !important;
+    height: auto !important;
+}
+
+.form-control.light-theme::placeholder {
+    color: #8c8c8c !important;
+}
+
 .date-picker-custom .react-datepicker-wrapper {
     width: 100% !important;
 }
@@ -436,7 +450,7 @@
 
 .ReactModal__Overlay.ReactModal__Overlay--after-open {
     background-color: rgb(0 0 0 / 68%) !important;
-    z-index: 99999999;
+    z-index: 999;
     transition: 0.5s ease-in-out;
 }
 

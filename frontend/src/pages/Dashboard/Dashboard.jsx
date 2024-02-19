@@ -329,60 +329,56 @@ const Dashboard = () => {
             </div> :
                 (user ? <>
                     <Layout />
-                    <section className="banner-area relative about-banner" id="home">
+                    <section className="breadcrumb-area relative about-banner" id="home">
                         <div className="overlay overlay-bg"></div>
                         <div className="container">
                             <div className="row d-flex align-items-center justify-content-center">
                                 <div className="about-content col-lg-12">
-                                    <h1 className="text-white">
+                                    <h3 className="text-white">
                                         Dashboard
-                                    </h1>
-                                    <p className="text-white link-nav"><a href="/">Home </a>  <span className="lnr lnr-arrow-right"></span>  <a href="/dashboard"> Dashboard</a></p>
+                                    </h3>
+                                    <p className="text-white link-nav"><a href="/">Home </a> / <span className="lnr lnr-arrow-right"></span>  <span className='current-page'> Dashboard</span></p>
                                 </div>
                             </div>
                         </div>
                     </section>
+                    <hr className="lg margin-0" />
 
-                    <section className='login-section section-gap'>
+                    <section id="car-block" className='login-section section-gap'>
                         <div className="container">
                             <div className="row login-form-section">
-                                <div className="col-sm-12 login-form-area">
+                                <div className="col-sm-12 login-form-area custom-bottom-radius">
                                     <div className="">
-                                        <h4 className='text-center mb-4'>PROFILE</h4>
+                                        <h4 className='text-center mb-4 margin-0 font-weight-700'>PROFILE</h4>
                                         {/* <button className='text-center mb-4'
                                         onClick={()=>navigate(-1)}>back</button> */}
                                         <hr />
                                         <div className="row">
-                                            <div className="col-sm-12 col-lg-4 d-flex align-items-center justify-content-center">
-                                                <div className='user-icon'>
-                                                    <i className='fa fa-user'></i>
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-12 col-lg-8">
+                                            <div className="col-sm-12 col-lg-12">
                                                 <div className="row p-2">
                                                     <div className="col-sm-5">
-                                                        <h6 className=''>User Name</h6>
+                                                        <h6 className='margin-0'>User Name</h6>
                                                     </div>
                                                     <div className="col-sm-7">
-                                                        <h6 className='text-secondary sub-text'>{user.userName}</h6>
+                                                        <h6 className='margin-0 text-secondary sub-text'>{user.userName}</h6>
                                                     </div>
                                                 </div>
                                                 <hr />
                                                 <div className="row p-2">
                                                     <div className="col-sm-5">
-                                                        <h6 className=''>E-Mail</h6>
+                                                        <h6 className='margin-0'>E-Mail</h6>
                                                     </div>
                                                     <div className="col-sm-7">
-                                                        <h6 className='text-secondary sub-text'>{user.email}</h6>
+                                                        <h6 className='margin-0 text-secondary sub-text'>{user.email}</h6>
                                                     </div>
                                                 </div>
                                                 <hr />
                                                 <div className="row p-2">
                                                     <div className="col-sm-5">
-                                                        <h6 className=''>Mobile</h6>
+                                                        <h6 className='margin-0'>Mobile</h6>
                                                     </div>
                                                     <div className="col-sm-7">
-                                                        <h6 className='text-secondary sub-text'>{user.phoneNum}</h6>
+                                                        <h6 className='margin-0 text-secondary sub-text'>{user.phoneNum}</h6>
                                                     </div>
                                                 </div>
                                                 {user?.role === "Driver" &&
@@ -390,7 +386,7 @@ const Dashboard = () => {
                                                         <hr />
                                                         <div className="row p-2">
                                                             <div className="col-sm-5">
-                                                                <h6 className=''>Current Rating</h6>
+                                                                <h6 className='margin-0'>Current Rating</h6>
                                                             </div>
                                                             <div className="col-sm-7">
                                                                 <div className="current-rating">
@@ -403,7 +399,7 @@ const Dashboard = () => {
                                                         <hr />
                                                         <div className="row p-2">
                                                             <div className="col-sm-5">
-                                                                <h6 className=''>Availability</h6>
+                                                                <h6 className='margin-0'>Availability</h6>
                                                             </div>
                                                             <div className="col-sm-7 d-flex justify-content-between align-items-end gap-10">
                                                                 <div className="radio-inputs">
@@ -417,9 +413,9 @@ const Dashboard = () => {
                                                                         <span className="name danger">Not Available</span>
                                                                     </label>
                                                                 </div>
-
+                                                                <hr />
                                                                 <div className='text-right'>
-                                                                    <button type='button' className='btn no-radius btn-success change-status-btn'
+                                                                    <button type='button' className='btn btn-success change-status-btn'
                                                                         onClick={() => handleChangeAvailability(user?.id)}>Change</button>
                                                                 </div>
                                                             </div>
@@ -430,16 +426,19 @@ const Dashboard = () => {
                                     </div>
                                 </div>
 
+                                <hr className='lg margin-0' />
+
                                 {allBookings?.length > 0 ?
-                                    <div className="col-sm-12 login-form-area mt-4">
+                                    <div className="col-sm-12 login-form-area mt-4 custom-top-radius custom-bottom-radius">
                                         <div className="">
-                                            <h4 className='text-center mb-4'>BOOKINGS</h4>
+                                            <h4 className='text-center mb-4 margin-0 font-weight-700'>BOOKINGS</h4>
+                                            <hr />
                                             <div className="row">
                                                 <div className="col-sm-12">
                                                     <div class="inner-two-col">
                                                         <div class="text-page">
-                                                            <div className="book-table-area">
-                                                                <table>
+                                                            <div className="book-table-area table-responsive">
+                                                                <table className='table margin-bottom-0'>
                                                                     <thead>
                                                                         <tr>
                                                                             <th>No.</th>
@@ -470,14 +469,14 @@ const Dashboard = () => {
                                                                                         <span className={`booking-status ${book?.bookingDetails?.status == "Completed" ? "completed" : "pending"}`}>{book?.bookingDetails?.status}</span>
                                                                                     </td>
                                                                                     <td className='text-center'>
-                                                                                        <button className='btn view-btn' 
+                                                                                        <button className='btn view-btn margin-bottom-0'
                                                                                             onClick={() => handleBookingUser(cusDetail, driverDeta)}
                                                                                         >
                                                                                             <i className='fa fa-eye'></i>
                                                                                         </button>
 
                                                                                         {(user?.role === "Driver" && book?.bookingDetails?.status == "Pending") &&
-                                                                                            <button className='btn view-btn btn-success ml-2'
+                                                                                            <button className='btn view-btn btn-success ml-2 margin-bottom-0'
                                                                                                 onClick={() => handleConfirm(book?.bookingDetails?.id)}>
                                                                                                 Confirm
                                                                                             </button>
@@ -495,306 +494,162 @@ const Dashboard = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> :
+                                    </div>
+                                    :
                                     <div className="no-data-created-area">
                                         <div className='no-data-created'>
                                             <div className='no-data-text'>No Bookings Found!</div>
                                         </div>
-                                    </div>}
-
-                                {(user?.role === "Admin" && allUsers?.length > 0) &&
-                                    <div className="col-sm-12 login-form-area mt-4">
-                                        <div className="">
-                                            <h4 className='text-center mb-4'>USERS</h4>
-                                            <div className="bg-white p-3 mb-3">
-                                                <div className="row">
-                                                    <div className="col-sm-7 m-auto">
-                                                        <h6 className='text-dark mb-0'>Select User:</h6>
-                                                    </div>
-                                                    <div className="col-sm-5">
-                                                        <select className='form-control' value={selecteValue}
-                                                            onChange={(e) => setSelecteValue(e.target.value)}>
-                                                            {/* <option value="">-- Select User --</option> */}
-                                                            <option value="Customer" selected>Customer</option>
-                                                            <option value="Driver">Driver</option>
-                                                            <option value="Operator">Operator</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="row">
-                                                <div className="col-sm-12">
-
-                                                    <div class="inner-two-col">
-                                                        <div class="text-page">
-                                                            <div className="book-table-area">
-                                                                <table>
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>No.</th>
-                                                                            <th>Name</th>
-                                                                            <th>E-Mail</th>
-                                                                            <th>Mobile</th>
-                                                                            <th>Role</th>
-                                                                            {selecteValue === "Driver" &&
-                                                                                <>
-                                                                                    <th className='text-center'>Availability</th>
-                                                                                    <th>Rating</th>
-                                                                                </>}
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        {allUsers.map((user, index) => {
-                                                                            return (
-                                                                                <tr>
-                                                                                    <td>{index + 1}.</td>
-                                                                                    <td>{user?.userName}</td>
-                                                                                    <td>{user?.email}</td>
-                                                                                    <td>{user?.phoneNum}</td>
-                                                                                    <td>{user?.role}</td>
-                                                                                    {user?.role === "Driver" &&
-                                                                                        <>
-                                                                                            <td className='text-center'>
-                                                                                                {user?.availability ? <span className="booking-status completed">Available</span> :
-                                                                                                    <span className="booking-status pending">Not Available</span>}
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div className="current-rating">
-                                                                                                    {renderStars(user?.rating)}
-                                                                                                </div>
-                                                                                            </td>
-                                                                                        </>}
-
-                                                                                </tr>
-                                                                            )
-                                                                        })}
-
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 }
 
-                                {(user.role === "Driver") &&
-                                    <div className="col-sm-12 login-form-area mt-4">
-                                        <div className="">
-                                            <div className="d-flex align-items-center justify-content-between mb-3">
-                                                <h4 className='text-center mb-0'>ROUTE CHARGES</h4>
-                                                <button className='btn btn-sm btn-success' 
-                                                onClick={()=>setCreateIsOpen(true)}
-                                                >
-                                                    <i className='fa fa-plus mr-2'></i>
-                                                    Create New
-                                                </button>
-                                            </div>
+                                {(user?.role === "Admin" && allUsers?.length > 0) &&
+                                    <>
+                                        <hr className='lg margin-0' />
+                                        <div className="col-sm-12 login-form-area mt-4 custom-top-radius">
+                                            <div className="">
+                                                <h4 className='text-center mb-4 font-weight-700 margin-0'>USERS</h4>
+                                                <hr />
+                                                <div className="bg-white p-3 mb-3">
+                                                    <div className="row">
+                                                        <div className="col-sm-7 m-auto">
+                                                            <h6 className='text-dark mb-0'>Select User:</h6>
+                                                        </div>
+                                                        <div className="col-sm-5">
+                                                            <select className='form-control light-theme' value={selecteValue}
+                                                                onChange={(e) => setSelecteValue(e.target.value)}>
+                                                                {/* <option value="">-- Select User --</option> */}
+                                                                <option value="Customer" selected>Customer</option>
+                                                                <option value="Driver">Driver</option>
+                                                                <option value="Operator">Operator</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-sm-12">
 
-                                            <div className="row">
-                                                <div className="col-sm-12">
-
-                                                    <div class="inner-two-col">
-                                                        <div class="text-page">
-                                                            <div className="book-table-area">
-                                                                <table>
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>No.</th>
-                                                                            <th>From</th>
-                                                                            <th>To</th>
-                                                                            <th>Amount</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    {allRoutes?.length > 0 ?
+                                                        <div class="inner-two-col">
+                                                            <div class="text-page">
+                                                                <div className="book-table-area table-responsive">
+                                                                    <table className='table margin-bottom-0'>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>No.</th>
+                                                                                <th>Name</th>
+                                                                                <th>E-Mail</th>
+                                                                                <th>Mobile</th>
+                                                                                <th>Role</th>
+                                                                                {selecteValue === "Driver" &&
+                                                                                    <>
+                                                                                        <th className='text-center'>Availability</th>
+                                                                                        <th>Rating</th>
+                                                                                    </>}
+                                                                            </tr>
+                                                                        </thead>
                                                                         <tbody>
-                                                                            {allRoutes?.map((routesCharge, index) => {
+                                                                            {allUsers.map((user, index) => {
                                                                                 return (
                                                                                     <tr>
                                                                                         <td>{index + 1}.</td>
-                                                                                        <td>{routesCharge?.from}</td>
-                                                                                        <td>{routesCharge?.to}</td>
-                                                                                        <td>{routesCharge?.money}</td>
+                                                                                        <td>{user?.userName}</td>
+                                                                                        <td>{user?.email}</td>
+                                                                                        <td>{user?.phoneNum}</td>
+                                                                                        <td>{user?.role}</td>
+                                                                                        {user?.role === "Driver" &&
+                                                                                            <>
+                                                                                                <td className='text-center'>
+                                                                                                    {user?.availability ? <span className="booking-status completed">Available</span> :
+                                                                                                        <span className="booking-status pending">Not Available</span>}
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    <div className="current-rating">
+                                                                                                        {renderStars(user?.rating)}
+                                                                                                    </div>
+                                                                                                </td>
+                                                                                            </>}
+
                                                                                     </tr>
                                                                                 )
                                                                             })}
 
-                                                                        </tbody> :
-                                                                        <tr>
-                                                                            <td colSpan={4} className='text-center text-secondary'>No Data found!</td>
-                                                                        </tr>
-                                                                    }
-
-                                                                </table>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>}
+                                    </>
+                                }
+
+                                {(user.role === "Driver") &&
+                                    <>
+                                        <hr className='lg margin-0' />
+                                        <div className="col-sm-12 login-form-area mt-4 custom-top-radius">
+                                            <div className="">
+                                                <div className="d-flex align-items-center justify-content-between mb-3">
+                                                    <h4 className='text-center mb-0 font-weight-700 margin-0'>ROUTE CHARGES</h4>
+                                                    <hr />
+                                                    <button className='btn btn-sm btn-success'
+                                                        onClick={() => setCreateIsOpen(true)}
+                                                    >
+                                                        <i className='fa fa-plus mr-2'></i>&nbsp;
+                                                        Create New
+                                                    </button>
+                                                </div>
+
+                                                <div className="row">
+                                                    <div className="col-sm-12">
+
+                                                        <div class="inner-two-col">
+                                                            <div class="text-page">
+                                                                <div className="book-table-area table-responsive">
+                                                                    <table className='table margin-bottom-0'>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>No.</th>
+                                                                                <th>From</th>
+                                                                                <th>To</th>
+                                                                                <th>Amount</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        {allRoutes?.length > 0 ?
+                                                                            <tbody>
+                                                                                {allRoutes?.map((routesCharge, index) => {
+                                                                                    return (
+                                                                                        <tr>
+                                                                                            <td>{index + 1}.</td>
+                                                                                            <td>{routesCharge?.from}</td>
+                                                                                            <td>{routesCharge?.to}</td>
+                                                                                            <td>{routesCharge?.money}</td>
+                                                                                        </tr>
+                                                                                    )
+                                                                                })}
+
+                                                                            </tbody> :
+                                                                            <tr>
+                                                                                <td colSpan={4} className='text-center text-secondary'>No Data found!</td>
+                                                                            </tr>
+                                                                        }
+
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                }
                             </div>
                         </div>
                     </section>
 
                     <Footer />
-
-                    {/* <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div className="modal-dialog modal-dialog-centered modal-lg">
-                            <div className="modal-content">
-                                <div className="modal-header">
-                                    <h5 className="modal-title text-orange" id="exampleModalLabel">User Information</h5>
-                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div className="modal-body bg-gray">
-                                    {bookingUserDetail?.Customer &&
-                                        <>
-                                            <h6 className='pb-3 text-success'>Customer Information</h6>
-                                            <div className='bg-white pt-4 pb-4 pl-3 pr-3'>
-                                                <div className="row">
-                                                    <div className="col-12 col-lg-4 d-flex align-items-center justify-content-center">
-                                                        <div className='user-icon'>
-                                                            <i className='fa fa-user'></i>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-12 col-lg-8">
-                                                        <div className="row">
-                                                            <div className="col-5">
-                                                                <h6 className=''>UserName</h6>
-                                                            </div>
-                                                            <div className="col-7">
-                                                                <h6 className='text-secondary sub-text'>{bookingUserDetail?.Customer?.userName}</h6>
-                                                            </div>
-                                                        </div>
-                                                        <hr />
-                                                        <div className="row">
-                                                            <div className="col-5">
-                                                                <h6 className=''>E-Mail</h6>
-                                                            </div>
-                                                            <div className="col-7">
-                                                                <h6 className='text-secondary sub-text'>{bookingUserDetail?.Customer?.email}</h6>
-                                                            </div>
-                                                        </div>
-                                                        <hr />
-                                                        <div className="row">
-                                                            <div className="col-5">
-                                                                <h6 className=''>Mobile</h6>
-                                                            </div>
-                                                            <div className="col-7">
-                                                                <h6 className='text-secondary sub-text'>{bookingUserDetail?.Customer?.phoneNum}</h6>
-                                                            </div>
-                                                        </div>
-
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr />
-                                        </>
-                                    }
-                                    {bookingUserDetail?.Driver &&
-                                        <>
-                                            <h6 className='pb-3 text-info'>Driver Information</h6>
-                                            <div className='bg-white pt-4 pb-4 pl-3 pr-3'>
-                                                <div className="row">
-                                                    <div className="col-12 col-lg-4 d-flex align-items-center justify-content-center">
-                                                        <div className='user-icon'>
-                                                            <i className='fa fa-user'></i>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-12 col-lg-8">
-                                                        <div className="row">
-                                                            <div className="col-5">
-                                                                <h6 className=''>UserName</h6>
-                                                            </div>
-                                                            <div className="col-7">
-                                                                <h6 className='text-secondary sub-text'>{bookingUserDetail?.Driver?.userName}</h6>
-                                                            </div>
-                                                        </div>
-                                                        <hr />
-                                                        <div className="row">
-                                                            <div className="col-5">
-                                                                <h6 className=''>E-Mail</h6>
-                                                            </div>
-                                                            <div className="col-7">
-                                                                <h6 className='text-secondary sub-text'>{bookingUserDetail?.Driver?.email}</h6>
-                                                            </div>
-                                                        </div>
-                                                        <hr />
-                                                        <div className="row">
-                                                            <div className="col-5">
-                                                                <h6 className=''>Mobile</h6>
-                                                            </div>
-                                                            <div className="col-7">
-                                                                <h6 className='text-secondary sub-text'>{bookingUserDetail?.Driver?.phoneNum}</h6>
-                                                            </div>
-                                                        </div>
-                                                        <hr />
-                                                        <div className="row">
-                                                            <div className="col-5">
-                                                                <h6 className=''>Availability</h6>
-                                                            </div>
-                                                            <div className="col-7">
-                                                                {(bookingUserDetail?.Driver?.availability) ? <h6 className='text-success sub-text'>Available</h6> :
-                                                                    <h6 className='text-warning sub-text'>Not Available</h6>}
-
-                                                            </div>
-                                                        </div>
-                                                        <hr />
-                                                        <div className="row">
-                                                            <div className="col-5">
-                                                                <h6 className=''>Current Rating</h6>
-                                                            </div>
-                                                            <div className="col-7">
-                                                                <div className="current-rating">
-                                                                    {renderStars(bookingUserDetail?.Driver?.rating)}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr />
-                                            <div className="row pl-2 pr-2">
-                                                <div className="col-12 col-md-6 my-auto">
-                                                    <h6 className='mb-0'>Rating</h6>
-                                                </div>
-                                                <div className="col-12 col-md-6">
-                                                    <div className="form-group mt-2">
-                                                        <div class="rating">
-                                                            <input value="5" name="rate" id="star5" type="radio"
-                                                                onChange={() => handleRating(bookingUserDetail?.Driver?.id, 5)} />
-                                                            <label title="text" for="star5"></label>
-                                                            <input value="4" name="rate" id="star4" type="radio"
-                                                                onChange={() => handleRating(bookingUserDetail?.Driver?.id, 4)} />
-                                                            <label title="text" for="star4"></label>
-                                                            <input value="3" name="rate" id="star3" type="radio"
-                                                                onChange={() => handleRating(bookingUserDetail?.Driver?.id, 3)} />
-                                                            <label title="text" for="star3"></label>
-                                                            <input value="2" name="rate" id="star2" type="radio"
-                                                                onChange={() => handleRating(bookingUserDetail?.Driver?.id, 2)} />
-                                                            <label title="text" for="star2"></label>
-                                                            <input value="1" name="rate" id="star1" type="radio"
-                                                                onChange={() => handleRating(bookingUserDetail?.Driver?.id, 1)} />
-                                                            <label title="text" for="star1"></label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </>
-                                    }
-                                </div>
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
 
                     {/* view modal here */}
                     <Modal
@@ -810,102 +665,92 @@ const Dashboard = () => {
 
                         <div className="modal--body">
                             {bookingUserDetail?.Customer &&
-                                <>
-                                    <h6 className='pb-3 text-success'>Customer Information</h6>
+                                <div className='modal--content'>
+                                    <h6 className='pb-3 text-success margin-0'>Customer Information</h6>
+                                    <hr />
                                     <div className='bg-white pt-4 pb-4 pl-3 pr-3'>
                                         <div className="row">
-                                            <div className="col-sm-12 col-lg-4 d-flex align-items-center justify-content-center">
-                                                <div className='user-icon'>
-                                                    <i className='fa fa-user'></i>
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-12 col-lg-8">
+                                            <div className="col-sm-12 col-lg-12">
                                                 <div className="row">
                                                     <div className="col-sm-5">
-                                                        <h6 className=''>UserName</h6>
+                                                        <h6 className='margin-0'>UserName</h6>
                                                     </div>
                                                     <div className="col-sm-7">
-                                                        <h6 className='text-secondary sub-text'>{bookingUserDetail?.Customer?.userName}</h6>
+                                                        <h6 className='margin-0 text-secondary sub-text'>{bookingUserDetail?.Customer?.userName}</h6>
                                                     </div>
                                                 </div>
-                                                <hr />
+                                                <hr className="cus-hr-line" />
                                                 <div className="row">
                                                     <div className="col-sm-5">
-                                                        <h6 className=''>E-Mail</h6>
+                                                        <h6 className='margin-0'>E-Mail</h6>
                                                     </div>
                                                     <div className="col-sm-7">
-                                                        <h6 className='text-secondary sub-text'>{bookingUserDetail?.Customer?.email}</h6>
+                                                        <h6 className='margin-0 text-secondary sub-text'>{bookingUserDetail?.Customer?.email}</h6>
                                                     </div>
                                                 </div>
-                                                <hr />
+                                                <hr className="cus-hr-line" />
                                                 <div className="row">
                                                     <div className="col-sm-5">
-                                                        <h6 className=''>Mobile</h6>
+                                                        <h6 className='margin-0'>Mobile</h6>
                                                     </div>
                                                     <div className="col-sm-7">
-                                                        <h6 className='text-secondary sub-text'>{bookingUserDetail?.Customer?.phoneNum}</h6>
+                                                        <h6 className='margin-0 text-secondary sub-text'>{bookingUserDetail?.Customer?.phoneNum}</h6>
                                                     </div>
                                                 </div>
-
-
                                             </div>
                                         </div>
                                     </div>
-                                    <hr />
-                                </>
+                                </div>
                             }
+                            <hr />
                             {bookingUserDetail?.Driver &&
-                                <>
-                                    <h6 className='pb-3 text-info'>Driver Information</h6>
-                                    <div className='bg-white pt-4 pb-4 pl-3 pr-3'>
+                                <div className='modal--content'>
+                                    <h6 className='pb-3 text-info margin-0'>Driver Information</h6>
+                                    <hr />
+                                    <div className='bg-white'>
                                         <div className="row">
-                                            <div className="col-sm-12 col-lg-4 d-flex align-items-center justify-content-center">
-                                                <div className='user-icon'>
-                                                    <i className='fa fa-user'></i>
-                                                </div>
-                                            </div>
-                                            <div className="col-sm-12 col-lg-8">
+                                            <div className="col-sm-12 col-lg-12">
                                                 <div className="row">
                                                     <div className="col-sm-5">
-                                                        <h6 className=''>UserName</h6>
+                                                        <h6 className='margin-0 '>UserName</h6>
                                                     </div>
                                                     <div className="col-sm-7">
-                                                        <h6 className='text-secondary sub-text'>{bookingUserDetail?.Driver?.userName}</h6>
+                                                        <h6 className='margin-0 text-secondary sub-text'>{bookingUserDetail?.Driver?.userName}</h6>
                                                     </div>
                                                 </div>
-                                                <hr />
+                                                <hr className="cus-hr-line" />
                                                 <div className="row">
                                                     <div className="col-sm-5">
-                                                        <h6 className=''>E-Mail</h6>
+                                                        <h6 className='margin-0 '>E-Mail</h6>
                                                     </div>
                                                     <div className="col-sm-7">
-                                                        <h6 className='text-secondary sub-text'>{bookingUserDetail?.Driver?.email}</h6>
+                                                        <h6 className='margin-0 text-secondary sub-text'>{bookingUserDetail?.Driver?.email}</h6>
                                                     </div>
                                                 </div>
-                                                <hr />
+                                                <hr className="cus-hr-line" />
                                                 <div className="row">
                                                     <div className="col-sm-5">
-                                                        <h6 className=''>Mobile</h6>
+                                                        <h6 className='margin-0 '>Mobile</h6>
                                                     </div>
                                                     <div className="col-sm-7">
-                                                        <h6 className='text-secondary sub-text'>{bookingUserDetail?.Driver?.phoneNum}</h6>
+                                                        <h6 className='margin-0 text-secondary sub-text'>{bookingUserDetail?.Driver?.phoneNum}</h6>
                                                     </div>
                                                 </div>
-                                                <hr />
+                                                <hr className="cus-hr-line" />
                                                 <div className="row">
                                                     <div className="col-sm-5">
-                                                        <h6 className=''>Availability</h6>
+                                                        <h6 className='margin-0 '>Availability</h6>
                                                     </div>
                                                     <div className="col-sm-7">
-                                                        {(bookingUserDetail?.Driver?.availability) ? <h6 className='text-success sub-text'>Available</h6> :
-                                                            <h6 className='text-warning sub-text'>Not Available</h6>}
+                                                        {(bookingUserDetail?.Driver?.availability) ? <h6 className='margin-0 text-success sub-text'>Available</h6> :
+                                                            <h6 className='margin-0 text-warning sub-text'>Not Available</h6>}
 
                                                     </div>
                                                 </div>
-                                                <hr />
+                                                <hr className="cus-hr-line" />
                                                 <div className="row">
                                                     <div className="col-sm-5">
-                                                        <h6 className=''>Current Rating</h6>
+                                                        <h6 className='margin-0 '>Current Rating</h6>
                                                     </div>
                                                     <div className="col-sm-7">
                                                         <div className="current-rating">
@@ -917,10 +762,10 @@ const Dashboard = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <hr />
+                                    <hr className="cus-hr-line" />
                                     <div className="row pl-2 pr-2">
                                         <div className="col-sm-12 col-md-6 my-auto">
-                                            <h6 className='mb-0'>Rating</h6>
+                                            <h6 className='margin-0'>Rating</h6>
                                         </div>
                                         <div className="col-sm-12 col-md-6">
                                             <div className="form-group mt-2">
@@ -944,7 +789,7 @@ const Dashboard = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </>
+                                </div>
                             }
                         </div>
 
@@ -973,27 +818,27 @@ const Dashboard = () => {
                             <form>
                                 <div className='book-form-area'>
                                     <div class="form-group row mb-4">
-                                        <label for="from_location" class="col-sm-2 col-form-label text-dark font-weight-500">From :</label>
+                                        <label for="from_location" class="col-sm-2 col-form-label text-orange font-weight-500">From :</label>
                                         <div class="col-sm-10">
-                                            <input type="text" name='fromLocation' className='form-control' placeholder='Enter Location'
+                                            <input type="text" name='fromLocation' className='form-control dark-theme' placeholder='Enter Location'
                                                 value={routeDetail.fromLocation}
                                                 onChange={handleInputChange} />
                                         </div>
                                     </div>
 
                                     <div class="form-group row mb-4">
-                                        <label for="to_location" class="col-sm-2 col-form-label text-dark font-weight-500">To :</label>
+                                        <label for="to_location" class="col-sm-2 col-form-label text-orange font-weight-500">To :</label>
                                         <div class="col-sm-10">
-                                            <input type="text" name='toLocation' className='form-control' placeholder='Enter Location'
+                                            <input type="text" name='toLocation' className='form-control dark-theme' placeholder='Enter Location'
                                                 value={routeDetail.toLocation}
                                                 onChange={handleInputChange} />
                                         </div>
                                     </div>
 
-                                    <div class="form-group row mb-0">
-                                        <label for="amount" class="col-sm-2 col-form-label text-dark font-weight-500">Amount (LKR) :</label>
+                                    <div class="form-group row margin-bottom-0">
+                                        <label for="amount" class="col-sm-2 col-form-label text-orange font-weight-500">Amount : <br />(LKR)</label>
                                         <div class="col-sm-10">
-                                            <input type="text" name='amount' className='form-control' placeholder='Enter Amount'
+                                            <input type="text" name='amount' className='form-control dark-theme' placeholder='Enter Amount'
                                                 value={routeDetail.amount}
                                                 onChange={handleInputChange} />
                                         </div>
@@ -1013,54 +858,6 @@ const Dashboard = () => {
                     </Modal>
                     {/*  */}
 
-
-                    {/* <div class="modal fade" id="routeCharegeModal" tabindex="-1" aria-labelledby="routeCharegeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title text-orange" id="routeCharegeModalLabel">Create</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body bg-gray">
-                                    <form>
-                                        <div class="form-group row mb-4">
-                                            <label for="from_location" class="col-sm-2 col-form-label text-dark font-weight-500">From :</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" name='fromLocation' className='form-control' placeholder='Enter Location'
-                                                    value={routeDetail.fromLocation}
-                                                    onChange={handleInputChange} />
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row mb-4">
-                                            <label for="to_location" class="col-sm-2 col-form-label text-dark font-weight-500">To :</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" name='toLocation' className='form-control' placeholder='Enter Location'
-                                                    value={routeDetail.toLocation}
-                                                    onChange={handleInputChange} />
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row mb-0">
-                                            <label for="amount" class="col-sm-2 col-form-label text-dark font-weight-500">Amount (LKR) :</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" name='amount' className='form-control' placeholder='Enter Amount'
-                                                    value={routeDetail.amount}
-                                                    onChange={handleInputChange} />
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-success"
-                                        onClick={handleRouteCreate}>Create</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
 
                 </> :
                     <div className="dot-spinner-area">

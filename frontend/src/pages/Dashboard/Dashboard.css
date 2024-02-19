@@ -48,7 +48,7 @@
     display: flex;
     gap: 2px;
     flex-shrink: 0;
-    background-color: #797979 ;
+    background-color: #797979;
     border-radius: 50px;
     padding: 5px;
     justify-content: center;
@@ -58,11 +58,11 @@
     color: #f8ba00 !important;
 }
 
-.view-btn .fa{
+.view-btn .fa {
     margin-right: 3px !important;
 }
 
-.view-btn{
+.view-btn {
     font-weight: 700 !important;
     text-transform: uppercase !important;
 }
@@ -335,6 +335,40 @@
     opacity: 0.3;
 }
 
-.change-status-btn{
+.change-status-btn {
     padding: 11px 15px !important;
+}
+
+.modal--content {
+    background-color: #ececec !important;
+    border-radius: 10px !important;
+    padding: 30px;
+}
+
+.modal--content h6 {
+    font-size: 14px !important;
+    text-transform: capitalize !important;
+}
+
+.cus-hr-line {
+    margin: 12px 0 !important;
+    border-bottom: 1px solid #ffffff;
+}
+
+.login-form-area h6 {
+    font-size: 15px !important;
+}
+
+.custom-bottom-radius {
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+.custom-top-radius {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+}
+
+.btn {
+    text-transform: capitalize !important;
 }

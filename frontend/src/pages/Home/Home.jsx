@@ -237,32 +237,32 @@ const Home = () => {
         return stars;
     };
 
-    useEffect(()=>{
-        if(driverId){
+    useEffect(() => {
+        if (driverId) {
             setBookingButtonStatus(false);
             console.log(driverId)
-            axios.post(`${process.env.REACT_APP_SERVER_URL}/already-booked`, {from:selectedLocation, to:selectedToLocation, driverId, customerId:user?.id}, {
+            axios.post(`${process.env.REACT_APP_SERVER_URL}/already-booked`, { from: selectedLocation, to: selectedToLocation, driverId, customerId: user?.id }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     Accept: 'application/json'
                 }
             })
-                .then(res=>{
+                .then(res => {
                     console.log(res.data);
-                    if(res.data.message === "Already Booked"){
+                    if (res.data.message === "Already Booked") {
                         setBookingButtonStatus(false);
-                       showErrorMessage("You have already booked this driver, and the trip is not finished yet.")
-                    }else if(res.data.message === "Not Booked"){
+                        showErrorMessage("You have already booked this driver, and the trip is not finished yet.")
+                    } else if (res.data.message === "Not Booked") {
                         setBookingButtonStatus(true);
                     }
                 })
-                .catch(err=>{
+                .catch(err => {
                     console.log(err)
                     showErrorMessage(err.response.data.error)
                     setBookingButtonStatus(false);
                 })
-            }
-    },[driverId]);
+        }
+    }, [driverId]);
 
     const handleBooking = () => {
         const bookingData = {
@@ -292,15 +292,17 @@ const Home = () => {
                 showErrorMessage(err.response.data.error)
             })
 
+        setIsOpen(false);
+
     }
-    useEffect(()=>{
-        if(!modalIsOpen){
+    useEffect(() => {
+        if (!modalIsOpen) {
             setDriverId("")
             setShowDateAndTime(false)
             setSelectedRowIndex(null)
             setBookingButtonStatus(false)
         }
-    },[modalIsOpen])
+    }, [modalIsOpen])
     return (
         <>
             <Layout />
@@ -416,7 +418,8 @@ const Home = () => {
             <hr className="lg margin-bottom-0" />
             <section id="car-block">
                 <div className="car-right animation-block">
-                    <img src="./images/_car-big-side.png" alt="Car" /></div>
+                    <img src="./images/_car-big-side.png" alt="Car" />
+                </div>
                 <div className="container">
                     <div className="row">
                         <div className="col-md-7">
@@ -558,8 +561,8 @@ const Home = () => {
 
                     <div class="inner-two-col">
                         <div class="text-page">
-                            <div className="book-table-area">
-                                <table>
+                            <div className="book-table-area table-responsive">
+                                <table className='table margin-bottom-0'>
                                     <thead>
                                         <tr>
                                             <th>No.</th>
