@@ -10,8 +10,7 @@ const driver = require("../dataBase/driver");
 const operator = require("../dataBase/operator");
 const fromToMoney = require("../dataBase/fromToMoney");
 const bookingDetail = require("../dataBase/bookingDetail");
-
-
+const contactUs = require("../dataBase/contactUs");
 
 /* create User */
 // const createCustomer = async (req, res) => {
@@ -868,6 +867,43 @@ const deleteRoute = async (req, res) => {
       }
 };
 
+/* contact us form data create */
+const contactUsCreate = async (req, res) => {
+    try {
+        // Extracting necessary data from request body
+        const { name, email, msg } = req.body;
+
+        // Creating a new document instance
+        const newContact = new contactUs({
+            name,
+            email,
+            msg
+        });
+
+        // Saving the new document to the database
+        const savedContact = await newContact.save();
+
+        // Sending success response
+        res.status(201).json(savedContact);
+    } catch (err) {
+        // Sending error response
+        res.status(500).json({ error: err.message });
+    }
+};
+
+/* find the all contact us documents*/
+const getAllContactUsDocuments = async (req, res) => {
+    try {
+        // Fetching all documents from the contactUs collection
+        const allContactUsDocuments = await contactUs.find();
+
+        // Sending success response with the retrieved documents
+        res.status(200).json(allContactUsDocuments);
+    } catch (err) {
+        // Sending error response if any error occurs
+        res.status(500).json({ error: err.message });
+    }
+};
 
 module.exports = {
     createCustomer,
@@ -890,4 +926,6 @@ module.exports = {
     getAllRoutesForDriver,
     editRoute,
     deleteRoute,
+    contactUsCreate,
+    getAllContactUsDocuments,
 }

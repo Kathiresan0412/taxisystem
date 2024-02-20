@@ -1,6 +1,7 @@
 .login-form-section {
     border: #FFC61A 1px solid;
     padding: 50px;
+    border-radius: 10px !important;
 }
 
 .login-form-area {
@@ -190,4 +191,8 @@ input[type="number"] {
 
 .login-form .log-label{
     font-size: 13px !important;
+}
+
+.font-weight-700{
+    font-weight: 700 !important;
 }

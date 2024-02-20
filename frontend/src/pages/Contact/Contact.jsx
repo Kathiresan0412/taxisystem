@@ -1,8 +1,61 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../../components/Layout';
 import { Footer } from '../../components/Footer';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.css';
+
+
 
 const Contact = () => {
+
+    const initialContactDetail = {
+        name: "",
+        email: "",
+        msg: ""
+    }
+    const [contactDetail, setContactDetail] = useState(initialContactDetail)
+
+    //for show success message for payment
+    function showSuccessMessage(message) {
+        Swal.fire({
+            title: 'Success',
+            text: message,
+            icon: 'success',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
+    }
+
+    //for show error message for payment
+    function showErrorMessage(message) {
+        Swal.fire({
+            title: 'Error!',
+            text: message,
+            icon: 'error',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'OK',
+        });
+    }
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setContactDetail({ ...contactDetail, [name]: value });
+    }
+
+    const handleSend = () => {
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/contact-us`, contactDetail)
+        .then(res=>{
+            console.log(res.data);
+            showSuccessMessage("Your message will be sent to the admin, and they will contact you.")
+            setContactDetail(initialContactDetail)
+        })
+        .catch(err=>{
+            console.log(err)
+            showErrorMessage(err.response.data.error)
+            setContactDetail(initialContactDetail)
+        })
+    }
 
     return (
         <>
@@ -49,17 +102,24 @@ const Contact = () => {
                                 <h3 class="aligncenter">Send Message</h3>
                                 <div class="form-group">
                                     <label>Your name <span class="red">*</span></label>
-                                    <input type="text" id="name" name="name" placeholder="Your name" required/>
+                                    <input type="text" id="name" name="name" placeholder="Your name" required
+                                    value={contactDetail.name}
+                                    onChange={handleInputChange}/>
                                 </div>
                                 <div class="form-group">
                                     <label>E-mail <span class="red">*</span></label>
-                                    <input type="text" id="email" name="email" placeholder="E-mail" required/>
+                                    <input type="text" id="email" name="email" placeholder="E-mail" required
+                                    value={contactDetail.email}
+                                    onChange={handleInputChange}/>
                                 </div>
                                 <div class="form-group">
                                     <label>Message <span class="red">*</span></label>
-                                    <textarea id="text" name="text" placeholder="Enter Message" required></textarea>
+                                    <textarea id="text" name="msg" placeholder="Enter Message" required
+                                    value={contactDetail.msg}
+                                    onChange={handleInputChange}></textarea>
                                 </div>
-                                <button type="button" className='btn btn-yellow aligncenter btn-lg'>
+                                <button type="button" className='btn btn-yellow aligncenter btn-lg'
+                                onClick={handleSend}>
                                     Send
                                 </button>
                             </form>

@@ -1278,7 +1278,7 @@ nav.navbar.affix {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 10000;
+  z-index: 998;
 }
 
 .navbar-dark-transparent .navbar {
@@ -2303,7 +2303,7 @@ nav.navbar.affix {
 #car-block .car-right img {
   /*.translate3d(-50%, 0); */
   position: relative;
-  transform: translate3d(845px, 0px, 0px);
+  /* transform: translate3d(845px, 0px, 0px); */
 }
 
 #car-block .car-right img.slideleft {

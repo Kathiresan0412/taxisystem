@@ -20,6 +20,8 @@ const {
     getAllRoutesForDriver,
     editRoute,
     deleteRoute,
+    contactUsCreate,
+    getAllContactUsDocuments,
 
 } = require("../Controller/authFunctions");
 const driver = require("../dataBase/driver");
@@ -108,6 +110,12 @@ router.get("/all-routes-driver/:driverId", employeeAuth, getAllRoutesForDriver);
 router.patch("/edit-route/:id", employeeAuth, editRoute);
 
 //delete route detail
-router.patch("/delete-route/:id", employeeAuth, deleteRoute);
+router.delete("/delete-route/:id", employeeAuth, deleteRoute);
+
+//contact us form create
+router.post("/contact-us", contactUsCreate);
+
+//find all contact us documents
+router.get("/contact-us", employeeAuth, getAllContactUsDocuments);
 
 module.exports = router;
