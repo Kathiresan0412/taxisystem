@@ -134,7 +134,7 @@ export const Header = () => {
                                 </li> */}
                                 {/* <li><a href="#">Testimonials</a></li> */}
                                 <li id='contact_page' className={location.pathname === '/contact-us' ? 'current_page_item' : ''}><a href="/contact-us">Contacts</a></li>
-                                {!user && <li className='header-button-area'><a href="/log-in" className="btn header-login-btn">LOGIN</a></li>}
+                                {!user && <li className={location.pathname === '/log-in' ? 'header-button-area' : 'header-button-area'}><a href="/log-in" className="btn header-login-btn">LOGIN</a></li>}
                                 {user &&
                                     <li className="hasSub header-button-area">
                                         <a href="#" className='profile-btn'>
