@@ -5,11 +5,11 @@ import './Login.css';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.css';
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 
 const Login = () => {
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     const intialCredentials = {
         userName: "",
         password: "",
