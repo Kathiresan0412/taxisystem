@@ -16,7 +16,7 @@ const axios = require("axios");
 dotenv.config(); // Load environment variables
 
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://lk-taxi.onrender.com'],
+  origin: ['http://localhost:3000', 'https://lktaxi.netlify.app'],
   credentials: true,
   methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Access-Control-Allow-Credentials']
