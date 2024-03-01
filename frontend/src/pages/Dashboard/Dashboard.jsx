@@ -7,6 +7,8 @@ import 'sweetalert2/dist/sweetalert2.css';
 import './Dashboard.css';
 import { useNavigate } from 'react-router-dom';
 import Modal from 'react-modal';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const customStyles = {
     content: {
@@ -33,6 +35,7 @@ const Dashboard = () => {
 
     const [viewModalIsOpen, setViewIsOpen] = React.useState(false);
     const [createModalIsOpen, setCreateIsOpen] = React.useState(false);
+    const [bookingModalIsOpen, setBookingIsOpen] = React.useState(false);
 
     const [editingRouteDetail, setEditingRouteDetail] = useState();
     const [contactUs, setContactUs] = useState([]);
@@ -52,6 +55,10 @@ const Dashboard = () => {
         setCreateIsOpen(false);
     }
 
+    function closeBookModal() {
+        setBookingIsOpen(false);
+    }
+
     const handleDelete = (id) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -69,50 +76,54 @@ const Dashboard = () => {
                         Accept: 'application/json'
                     }
                 })
-                .then(res => {
-                    if (res.status === 204) {
-                        Swal.fire('Success!', 'Route detail deleted successfully', 'success');
-                        setTimeout(() => {
-                            window.location.reload();
-                        }, 3000);
-                    } else {
-                        Swal.fire('Error!', res.data.error, 'error');
-                    }
-                })
-                .catch(err => {
-                    Swal.fire('Error!', err.response.data.error, 'error');
-                });
+                    .then(res => {
+                        if (res.status === 204) {
+                            Swal.fire('Success!', 'Route detail deleted successfully', 'success');
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 3000);
+                        } else {
+                            Swal.fire('Error!', res.data.error, 'error');
+                        }
+                    })
+                    .catch(err => {
+                        Swal.fire('Error!', err.response.data.error, 'error');
+                    });
             }
         });
     }
-    
+
 
     const handleEdit = (detail) => {
         setCreateIsOpen(true);
         setEditingRouteDetail(detail);
     }
 
+    const handleOperatorBook = (detail) => {
+        setBookingIsOpen(true);
+    }
 
-    useEffect(()=>{
-        if(editingRouteDetail){
-           
+
+    useEffect(() => {
+        if (editingRouteDetail) {
+
             setRouteDetail({
                 ...routeDetail,
-                fromLocation:editingRouteDetail?.from,
-                toLocation:editingRouteDetail?.to,
-                amount:editingRouteDetail?.money
+                fromLocation: editingRouteDetail?.from,
+                toLocation: editingRouteDetail?.to,
+                amount: editingRouteDetail?.money
             })
         }
 
-    },[editingRouteDetail])
+    }, [editingRouteDetail])
 
-    useEffect(()=>{
-        if(!createModalIsOpen){
+    useEffect(() => {
+        if (!createModalIsOpen) {
             setEditingRouteDetail();
             setRouteDetail(initialRouteDetail);
         }
 
-    },[createModalIsOpen])
+    }, [createModalIsOpen])
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -128,7 +139,7 @@ const Dashboard = () => {
             money: routeDetail.amount,
             driverId: user?.id
         };
-    
+
         let endpoint;
         let method; // Define method variable to hold the HTTP method
         if (editingRouteDetail) {
@@ -138,7 +149,7 @@ const Dashboard = () => {
             endpoint = `create-new-route-for-driver`;
             method = 'POST'; // Set method to POST if editingRouteDetail is not present
         }
-    
+
         axios({
             method, // Use the method variable to specify the HTTP method
             url: `${process.env.REACT_APP_SERVER_URL}/${endpoint}`,
@@ -148,19 +159,19 @@ const Dashboard = () => {
                 Accept: 'application/json'
             }
         })
-        .then(res => {
-            console.log(res.data);
-            showSuccessMessage(editingRouteDetail ? "Route detail Updated" : "New Route Created");
-            setTimeout(() => {
-                window.location.reload();
-            }, 3000);
-        })
-        .catch(err => {
-            console.log(err);
-            showErrorMessage(err.response.data.error);
-        });
+            .then(res => {
+                console.log(res.data);
+                showSuccessMessage(editingRouteDetail ? "Route detail Updated" : "New Route Created");
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            })
+            .catch(err => {
+                console.log(err);
+                showErrorMessage(err.response.data.error);
+            });
     };
-    
+
     //for show success message for payment
     function showSuccessMessage(message) {
         Swal.fire({
@@ -298,9 +309,9 @@ const Dashboard = () => {
             .then(res => {
                 console.log(res.data)
                 showSuccessMessage("Rating Sent");
-                setTimeout(()=>{
+                setTimeout(() => {
                     window.location.reload()
-                },3000)
+                }, 3000)
             })
             .catch(err => {
                 console.log(err)
@@ -319,23 +330,23 @@ const Dashboard = () => {
             confirmButtonText: 'Yes, Confirm the Booking!'
         }).then((result) => {
             if (result.isConfirmed) {
-            axios.patch(`${process.env.REACT_APP_SERVER_URL}/confirm-booking/${id}`, { id }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: 'application/json'
-                }
-            })
-                .then(res => {
-                    console.log(res.data)
-                    showSuccessMessage("Booking confirmed")
-                    setTimeout(()=>{
-                        window.location.reload()
-                    },3000)
+                axios.patch(`${process.env.REACT_APP_SERVER_URL}/confirm-booking/${id}`, { id }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: 'application/json'
+                    }
                 })
-                .catch(err => {
-                    console.log(err)
-                    showErrorMessage(err.response.data.error);
-                })
+                    .then(res => {
+                        console.log(res.data)
+                        showSuccessMessage("Booking confirmed")
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 3000)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        showErrorMessage(err.response.data.error);
+                    })
             }
         });
     }
@@ -351,23 +362,23 @@ const Dashboard = () => {
             confirmButtonText: 'Yes, Reject the Booking!'
         }).then((result) => {
             if (result.isConfirmed) {
-            axios.patch(`${process.env.REACT_APP_SERVER_URL}/reject-booking/${id}`, { id }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: 'application/json'
-                }
-            })
-                .then(res => {
-                    console.log(res.data)
-                    showSuccessMessage("Booking rejected!")
-                    setTimeout(()=>{
-                        window.location.reload()
-                    },3000)
+                axios.patch(`${process.env.REACT_APP_SERVER_URL}/reject-booking/${id}`, { id }, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: 'application/json'
+                    }
                 })
-                .catch(err => {
-                    console.log(err)
-                    showErrorMessage(err.response.data.error);
-                })
+                    .then(res => {
+                        console.log(res.data)
+                        showSuccessMessage("Booking rejected!")
+                        setTimeout(() => {
+                            window.location.reload()
+                        }, 3000)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        showErrorMessage(err.response.data.error);
+                    })
             }
         });
     }
@@ -382,9 +393,9 @@ const Dashboard = () => {
             .then(res => {
                 console.log(res.data)
                 showSuccessMessage("Availability Status Changed")
-                setTimeout(()=>{
+                setTimeout(() => {
                     window.location.reload()
-                },3000)
+                }, 3000)
             })
             .catch(err => {
                 console.log(err)
@@ -412,19 +423,19 @@ const Dashboard = () => {
                 })
 
             axios.get(`${process.env.REACT_APP_SERVER_URL}/contact-us`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        Accept: 'application/json'
-                    }
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: 'application/json'
+                }
+            })
+                .then(res => {
+                    console.log(res.data)
+                    setContactUs(res.data)
+
                 })
-                    .then(res => {
-                        console.log(res.data)
-                        setContactUs(res.data)
-                        
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
+                .catch(err => {
+                    console.log(err)
+                })
 
 
         }
@@ -574,6 +585,68 @@ const Dashboard = () => {
 
                                 <hr className='lg margin-0' />
 
+                                <div className="col-sm-12 login-form-area mt-4 custom-top-radius custom-bottom-radius">
+                                    <div className="">
+                                        <div className="d-flex align-items-center justify-content-between mb-3">
+                                            <h4 className='text-center mb-0 font-weight-700 margin-0'>OPERATOR BOOKINGS</h4>
+                                            <hr />
+                                            <button className='btn btn-sm btn-success'
+                                                onClick={() => setBookingIsOpen(true)}
+                                            >
+                                                <i className='fa fa-plus mr-2'></i>&nbsp;
+                                                Create Booking
+                                            </button>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-sm-12">
+                                                <div class="inner-two-col">
+                                                    <div class="text-page">
+                                                        <div className="book-table-area table-responsive">
+                                                            <table className='table margin-bottom-0'>
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>No.</th>
+                                                                        <th>Date</th>
+                                                                        <th>Time</th>
+                                                                        <th>From</th>
+                                                                        <th>To</th>
+                                                                        <th>Amount</th>
+                                                                        <th className='text-center'>Status</th>
+                                                                        <th className='text-center'>Action</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td>1.</td>
+                                                                        <td>10-20-2023</td>
+                                                                        <td>10:30</td>
+                                                                        <td>Kokuvil</td>
+                                                                        <td>Jaffna</td>
+                                                                        <td>1000</td>
+                                                                        <td className='text-center'>
+                                                                            {/* <span className="booking-status pending">Pending</span> */}
+                                                                            <span className="booking-status completed">Completed</span>
+                                                                        </td>
+                                                                        <td className='text-center'>
+                                                                            <button className='btn view-btn margin-bottom-0'>
+                                                                                <i className='fa fa-eye'></i>
+                                                                            </button>
+
+                                                                        </td>
+                                                                    </tr>
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr className='lg margin-0' />
+
                                 {allBookings?.length > 0 ?
                                     <div className="col-sm-12 login-form-area mt-4 custom-top-radius custom-bottom-radius">
                                         <div className="">
@@ -629,7 +702,7 @@ const Dashboard = () => {
                                                                                                 </button>
                                                                                                 <button className='btn view-btn btn-success ml-2'
                                                                                                     onClick={() => handleReject(book?.bookingDetails?.id)}
-                                                                                                    >
+                                                                                                >
                                                                                                     Reject
                                                                                                 </button>
                                                                                             </>
@@ -656,17 +729,19 @@ const Dashboard = () => {
                                     </div>
                                 }
 
-                                {(user?.role === "Admin" ) &&
+                                <hr className='lg margin-0' />
+
+                                {(user?.role === "Admin") &&
                                     <div className="col-sm-12 login-form-area mt-4">
                                         <div className="">
-                                            <h4 className='text-center mb-4'>USERS</h4>
+                                            <h4 className='text-center mb-4 margin-0 font-weight-700'>USERS</h4>
                                             <div className="bg-white p-3 mb-3">
                                                 <div className="row">
                                                     <div className="col-sm-7 m-auto">
                                                         <h6 className='text-dark mb-0'>Select User:</h6>
                                                     </div>
                                                     <div className="col-sm-5">
-                                                        <select className='form-control' value={selecteValue}
+                                                        <select className='form-control light-theme' value={selecteValue}
                                                             onChange={(e) => setSelecteValue(e.target.value)}>
                                                             {/* <option value="">-- Select User --</option> */}
                                                             <option value="Customer" selected>Customer</option>
@@ -676,52 +751,52 @@ const Dashboard = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            {allUsers?.length>0 && <div className="row">
+                                            {allUsers?.length > 0 && <div className="row">
                                                 <div className="col-sm-12">
 
-                                                        <div class="inner-two-col">
-                                                            <div class="text-page">
-                                                                <div className="book-table-area table-responsive">
-                                                                    <table className='table margin-bottom-0'>
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th>No.</th>
-                                                                                <th>Name</th>
-                                                                                <th>E-Mail</th>
-                                                                                <th>Mobile</th>
-                                                                                <th>Role</th>
-                                                                                {selecteValue === "Driver" &&
-                                                                                    <>
-                                                                                        <th className='text-center'>Availability</th>
-                                                                                        <th>Rating</th>
-                                                                                    </>}
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            {allUsers.map((user, index) => {
-                                                                                return (
-                                                                                    <tr>
-                                                                                        <td>{index + 1}.</td>
-                                                                                        <td>{user?.userName}</td>
-                                                                                        <td>{user?.email}</td>
-                                                                                        <td>{user?.phoneNum}</td>
-                                                                                        <td>{user?.role}</td>
-                                                                                        {user?.role === "Driver" &&
-                                                                                            <>
-                                                                                                <td className='text-center'>
-                                                                                                    {user?.availability ? <span className="booking-status completed">Available</span> :
-                                                                                                        <span className="booking-status pending">Not Available</span>}
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <div className="current-rating">
-                                                                                                        {renderStars(user?.rating)}
-                                                                                                    </div>
-                                                                                                </td>
-                                                                                            </>}
+                                                    <div class="inner-two-col">
+                                                        <div class="text-page">
+                                                            <div className="book-table-area table-responsive">
+                                                                <table className='table margin-bottom-0'>
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>No.</th>
+                                                                            <th>Name</th>
+                                                                            <th>E-Mail</th>
+                                                                            <th>Mobile</th>
+                                                                            <th>Role</th>
+                                                                            {selecteValue === "Driver" &&
+                                                                                <>
+                                                                                    <th className='text-center'>Availability</th>
+                                                                                    <th>Rating</th>
+                                                                                </>}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        {allUsers.map((user, index) => {
+                                                                            return (
+                                                                                <tr>
+                                                                                    <td>{index + 1}.</td>
+                                                                                    <td>{user?.userName}</td>
+                                                                                    <td>{user?.email}</td>
+                                                                                    <td>{user?.phoneNum}</td>
+                                                                                    <td>{user?.role}</td>
+                                                                                    {user?.role === "Driver" &&
+                                                                                        <>
+                                                                                            <td className='text-center'>
+                                                                                                {user?.availability ? <span className="booking-status completed">Available</span> :
+                                                                                                    <span className="booking-status pending">Not Available</span>}
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <div className="current-rating">
+                                                                                                    {renderStars(user?.rating)}
+                                                                                                </div>
+                                                                                            </td>
+                                                                                        </>}
 
-                                                                                    </tr>
-                                                                                )
-                                                                            })}
+                                                                                </tr>
+                                                                            )
+                                                                        })}
 
                                                                     </tbody>
                                                                 </table>
@@ -731,19 +806,21 @@ const Dashboard = () => {
                                                 </div>
                                             </div>}
                                         </div>
-                                    </div> }
-                                    {(user?.role === "Admin" && allUsers?.length===0) && <div className="no-data-created-area">
+                                    </div>}
+                                {(user?.role === "Admin" && allUsers?.length === 0) && <div className="no-data-created-area">
                                     <div className='no-data-created'>
                                         <div className='no-data-text'>No {selecteValue} Found!</div>
                                     </div>
                                 </div>}
 
 
-                                {(user?.role === "Admin" ) &&
-                                    <div className="col-sm-12 login-form-area mt-4">
-                                        <div className="">
-                                            <h4 className='text-center mb-4'>CONTACT US MESSAGES</h4>
-                                            {/* <div className="bg-white p-3 mb-3">
+                                {(user?.role === "Admin") &&
+                                    <>
+                                        <hr className='lg margin-0' />
+                                        <div className="col-sm-12 login-form-area mt-4">
+                                            <div className="">
+                                                <h4 className='text-center mb-4 margin-0 font-weight-700'>CONTACT US MESSAGES</h4>
+                                                {/* <div className="bg-white p-3 mb-3">
                                                 <div className="row">
                                                     <div className="col-sm-7 m-auto">
                                                         <h6 className='text-dark mb-0'>Select User:</h6>
@@ -759,55 +836,59 @@ const Dashboard = () => {
                                                     </div>
                                                 </div>
                                             </div> */}
-                                            {contactUs?.length>0 && <div className="row">
-                                                <div className="col-sm-12">
+                                                <hr />
+                                                {contactUs?.length > 0 &&
+                                                    <div className="row">
+                                                        <div className="col-sm-12">
 
-                                                        <div class="inner-two-col">
-                                                            <div class="text-page">
-                                                                <div className="book-table-area table-responsive">
-                                                                    <table className='table margin-bottom-0'>
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th>No.</th>
-                                                                                <th>Name</th>
-                                                                                <th>E-Mail</th>
-                                                                                {/* <th>Mobile</th> */}
-                                                                                <th>Message</th>
-                                                                                
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            {contactUs.map((msg, index) => {
-                                                                                return (
-                                                                                    <tr>
-                                                                                        <td>{index + 1}.</td>
-                                                                                        <td>{msg?.name}</td>
-                                                                                        <td>{msg?.email}</td>
-                                                                                        {/* <td>{msg?.phoneNum}</td> */}
-                                                                                        <td>{msg?.msg}</td>
-                                                                                    </tr>
-                                                                                )
-                                                                            })}
+                                                            <div class="inner-two-col">
+                                                                <div class="text-page">
+                                                                    <div className="book-table-area table-responsive">
+                                                                        <table className='table margin-bottom-0'>
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>No.</th>
+                                                                                    <th>Name</th>
+                                                                                    <th>E-Mail</th>
+                                                                                    {/* <th>Mobile</th> */}
+                                                                                    <th>Message</th>
 
-                                                                    </tbody>
-                                                                </table>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                {contactUs.map((msg, index) => {
+                                                                                    return (
+                                                                                        <tr>
+                                                                                            <td>{index + 1}.</td>
+                                                                                            <td>{msg?.name}</td>
+                                                                                            <td>{msg?.email}</td>
+                                                                                            {/* <td>{msg?.phoneNum}</td> */}
+                                                                                            <td>{msg?.msg}</td>
+                                                                                        </tr>
+                                                                                    )
+                                                                                })}
+
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                            </div>}
+                                                    </div>}
+                                            </div>
                                         </div>
-                                    </div> }
-                                    {(user?.role === "Admin" && contactUs?.length===0) && <div className="no-data-created-area">
+                                    </>
+                                }
+                                {(user?.role === "Admin" && contactUs?.length === 0) && <div className="no-data-created-area">
                                     <div className='no-data-created'>
                                         <div className='no-data-text'>No Contact Message Found!</div>
                                     </div>
                                 </div>}
-                                
+
 
                                 {(user.role === "Driver") &&
                                     <>
-                                        <hr className='lg margin-0' />
+                                        {/* <hr className='lg margin-0' /> */}
                                         <div className="col-sm-12 login-form-area mt-4 custom-top-radius">
                                             <div className="">
                                                 <div className="d-flex align-items-center justify-content-between mb-3">
@@ -851,9 +932,9 @@ const Dashboard = () => {
                                                                                                     onClick={() => handleEdit(routesCharge)}>
                                                                                                     Edit
                                                                                                 </button>
-                                                                                                <button className='btn view-btn btn-success ml-2'
+                                                                                                <button className='btn view-btn btn-danger ml-2 mb-0'
                                                                                                     onClick={() => handleDelete(routesCharge?._id)}
-                                                                                                    >
+                                                                                                >
                                                                                                     Delete
                                                                                                 </button>
                                                                                             </></td>
@@ -1083,11 +1164,178 @@ const Dashboard = () => {
                             <button type="button" class="btn btn-secondary modal-btn" onClick={closeCreateModal}>Close</button>
                             <button type="button" class="btn btn-success modal-btn"
                                 onClick={handleRouteCreate}
-                                disabled={routeDetail.fromLocation=="" || routeDetail.toLocation=="" || routeDetail.amount==""}>
-                                {editingRouteDetail? "Update" : "Create"}
+                                disabled={routeDetail.fromLocation == "" || routeDetail.toLocation == "" || routeDetail.amount == ""}>
+                                {editingRouteDetail ? "Update" : "Create"}
                             </button>
                         </div>
 
+                    </Modal>
+                    {/*  */}
+
+
+                    {/* booking modal here */}
+                    <Modal
+                        isOpen={bookingModalIsOpen}
+                        onRequestClose={closeBookModal}
+                        style={customStyles}
+                        contentLabel="Booking Modal"
+                    >
+                        <div className="modal--header">
+                            <h6>Booking</h6>
+                            <button className='btn close-button' onClick={closeBookModal}>&times;</button>
+                        </div>
+
+                        <div className="modal--body">
+                            <div className="selected-location-area custom">
+                                <div className="row">
+                                    <div className="col-lg-5">
+                                        <div className="form-group">
+                                            <label htmlFor="" className='form-label absolute text-orange'>From&nbsp;<span className='form-required'>*</span></label>
+                                            <input type="text" className='form-control dark-theme' placeholder='From' />
+
+                                            <div className='search-result-data-area custom'>
+                                                <div className='search-result-data'>Location 1</div>
+                                                <div className='search-result-data'>Location 1</div>
+                                                <div className='search-result-data'>Location 1</div>
+                                                <div className='search-result-data'>Location 1</div>
+                                            </div>
+
+                                            <small className='form-required'>This field is required</small>
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-5">
+                                        <div className="form-group">
+                                            <label htmlFor="" className='form-label absolute text-orange'>To&nbsp;<span className='form-required'>*</span></label>
+                                            <input type="text" className='form-control dark-theme' placeholder='To' />
+
+                                            <div className='search-result-data-area custom'>
+                                                <div className='search-result-data'>Location 1</div>
+                                                <div className='search-result-data'>Location 1</div>
+                                                <div className='search-result-data'>Location 1</div>
+                                                <div className='search-result-data'>Location 1</div>
+                                            </div>
+
+                                            <small className='form-required'>This field is required</small>
+                                        </div>
+                                    </div>
+                                    <div className="col-lg-2">
+                                        <div className="form-group">
+                                            <button type="button" class="btn btn-success modal-btn w-100 btn-margin">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="inner-two-col">
+                                <div class="text-page">
+                                    <div className="book-table-area table-responsive">
+                                        <table className='table margin-bottom-0'>
+                                            <thead>
+                                                <tr>
+                                                    <th>No.</th>
+                                                    <th>Driver Name</th>
+                                                    <th>Mobile No.</th>
+                                                    <th>Amount</th>
+                                                    <th>Rating</th>
+                                                    <th className='text-center'>Select</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr>
+                                                    <td>1.</td>
+                                                    <td>Driver</td>
+                                                    <td>044011511</td>
+                                                    <td>350</td>
+
+                                                    <td className='verical-align-middle'>
+                                                        <div className="current-rating">
+                                                            <i className='fa fa-star rate'></i>
+                                                            <i className='fa fa-star'></i>
+                                                            <i className='fa fa-star'></i>
+                                                            <i className='fa fa-star'></i>
+                                                            <i className='fa fa-star'></i>
+                                                        </div>
+                                                    </td>
+
+                                                    <td className='text-center'>
+                                                        <button
+                                                            className='btn modal-btn view-btn btn-success'
+                                                        >
+                                                            <i className='fa fa-check mr-2'>&nbsp;Select</i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tr>
+                                                <td colSpan={6} className='text-center text-secondary'>No Driver Details!</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <form action="">
+                                <div className='book-form-area'>
+                                    <div className="row">
+                                        <div className="col-12 col-lg-6">
+                                            <div className="form-group">
+                                                <label htmlFor="" className='form-label absolute text-orange'>Pickup Location&nbsp;<span className='form-required'>*</span></label>
+                                                <input type="text" className='form-control dark-theme' placeholder='Enter your pickup location' />
+                                                <small className='form-required'>This field is required</small>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-12 col-lg-6">
+                                            <div className="form-group">
+                                                <label htmlFor="" className='form-label absolute text-orange'>Date & Time&nbsp;<span className='form-required'>*</span></label>
+                                                <div className='w-100 date-picker-custom'>
+                                                    <DatePicker
+                                                        className='form-control dark-theme'
+                                                        placeholderText='Select Date and Time'
+                                                        showTimeSelect
+                                                        dateFormat="MMMM d, yyyy h:mm aa"
+                                                    />
+                                                </div>
+                                                <small className='form-required'>This field is required</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="book-form-title">Customer Detail</div>
+                                    <div className="row">
+                                        <div className="col-12 col-lg-4">
+                                            <div className="form-group">
+                                                <label htmlFor="" className='form-label absolute text-orange'>Name</label>
+                                                <input type="text" className='form-control dark-theme' placeholder='Enter name' />
+                                            </div>
+                                        </div>
+
+                                        <div className="col-12 col-lg-4">
+                                            <div className="form-group">
+                                                <label htmlFor="" className='form-label absolute text-orange'>Email&nbsp;<span className='form-required'>*</span></label>
+                                                <input type="email" className='form-control dark-theme' placeholder='Enter email' />
+                                                <small className='form-required'>This field is required</small>
+                                            </div>
+                                        </div>
+
+                                        <div className="col-12 col-lg-4">
+                                            <div className="form-group">
+                                                <label htmlFor="" className='form-label absolute text-orange'>Mobile&nbsp;<span className='form-required'>*</span></label>
+                                                <input type="text" className='form-control dark-theme' placeholder='Enter mobile no.' />
+                                                <small className='form-required'>This field is required</small>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div className="modal--footer">
+                            <button type="button" class="btn btn-secondary modal-btn" onClick={closeBookModal}>Close</button>
+                            <button type="button" class="btn btn-orange modal-btn">Book</button>
+                        </div>
                     </Modal>
                     {/*  */}
 

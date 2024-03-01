@@ -372,3 +372,25 @@
 .btn {
     text-transform: capitalize !important;
 }
+
+.w-100 {
+    width: 100%;
+}
+
+.btn-margin {
+    margin-top: 30px;
+}
+
+.form-required {
+    color: rgb(189, 7, 7);
+}
+
+.book-form-title {
+    color: #d6d6d6;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.mb-0 {
+    margin-bottom: 0 !important;
+}
