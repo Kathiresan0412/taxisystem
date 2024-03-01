@@ -10,7 +10,9 @@ const {
     getAllCreatedTo,
     findAlreadyBooking,
     createBooking,
+    createBookingByOperatorForCustomer,
     getAllBookings,
+    getAllBookingsOfOperator,
     confirmBooking,
     rejectBooking,
     getAllBookingsCustomer,
@@ -82,8 +84,14 @@ router.post("/already-booked", employeeAuth, findAlreadyBooking);
 //create booking 
 router.post("/create-new-booking", employeeAuth, createBooking);
 
+//create booking by operator for customer
+router.post("/create-new-booking-by-operator", employeeAuth, createBookingByOperatorForCustomer);
+
 //find all booking for driverId
 router.get("/booking/:driverId", employeeAuth, getAllBookings);
+
+//find all booking of operatorId
+router.get("/booking/:operatorId", employeeAuth, getAllBookingsOfOperator);
 
 //confirm the booking
 router.patch("/confirm-booking/:bookingId", employeeAuth, confirmBooking);

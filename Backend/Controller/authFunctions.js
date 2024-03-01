@@ -11,6 +11,7 @@ const operator = require("../dataBase/operator");
 const fromToMoney = require("../dataBase/fromToMoney");
 const bookingDetail = require("../dataBase/bookingDetail");
 const contactUs = require("../dataBase/contactUs");
+const bookingDetailByOperator = require("../dataBase/bookingDetailByOperator"); 
 
 /* create User */
 // const createCustomer = async (req, res) => {
@@ -461,7 +462,6 @@ const routeDetail = async (req, res) => {
     }
 };
 
-
 /* get all from route */
 const getAllCreatedFrom = async (req, res) => {
     try {
@@ -482,7 +482,6 @@ const getAllCreatedFrom = async (req, res) => {
         return res.status(500).json({ error: err.message });
     }
 };
-
 
 /* get all to route */
 const getAllCreatedTo = async (req, res) => {
@@ -554,6 +553,71 @@ const createBooking = async (req, res) => {
     }
 }
 
+/* create booking detail by operator*/
+const createBookingByOperatorForCustomer = async (req, res) => {
+    try {
+        const bookingId = uuidv4();
+        const customerId = `Cus_${bookingId}`
+        // const bookingTime = moment().format('hh:mmA'); // Format time as "10:15PM"
+        // const bookingDate = moment().format('DD/MM/YYYY'); // Format date as "dd/mm/yyyy"
+        let { driverId, operatorId, from, to, money, pickUpLocation, time, date, customerEmail, customerPhoneNum} = req.body;
+
+        from = from.toLowerCase()
+        to = to.toLowerCase()
+        const alreadyBookedWithStatusPending = await bookingDetailByOperator.findOne({from, to, driverId, customerEmail, status:"Pending"})
+        if(alreadyBookedWithStatusPending){
+            return res.status(500).json({error:"You have already booked this driver, and the trip is not finished yet."})
+        }
+
+        const alrdyExiestCustomer = await customer.findOne({email:customerEmail});
+        if(!alrdyExiestCustomer){
+            const newOperatorCustomer = new customer({
+                id:customerId,
+                userName:`${customerId}_Created By Operator`,
+                email:customerEmail,
+                phoneNum:customerPhoneNum,
+                role:"Customer"
+            })
+    
+            await newOperatorCustomer.save();
+        }
+
+        const newBookingDetailByOperator = new bookingDetailByOperator({
+            id:bookingId,
+            driverId,
+            time,
+            date,
+            operatorId,
+            customerId:alrdyExiestCustomer ? alrdyExiestCustomer.id : customerId,
+            customerEmail,
+            from,
+            to,
+            money,
+            status:"Pending",
+            pickUpLocation
+        });
+
+        await newBookingDetailByOperator.save();
+
+        const newBookingDetail = new bookingDetail({
+            id:bookingId,
+            driverId,
+            time,
+            date,
+            customerId:alrdyExiestCustomer ? alrdyExiestCustomer.id : customerId,
+            from,
+            to,
+            money,
+            status:"Pending",
+            pickUpLocation
+        });
+        return res.status(201).json(newBookingDetail);
+    } catch (err) {
+        // Handle any errors that occur during the process
+        return res.status(500).json({ error: err.message });
+    }
+}
+
 /* get all bookings for driver */
 const getAllBookings = async (req, res) => {
     try {
@@ -581,6 +645,32 @@ const getAllBookings = async (req, res) => {
     }
 };
 
+/* get all bookings of operator */
+const getAllBookingsOfOperator = async (req, res) => {
+    try {
+        const { operatorId } = req.params;
+        const allBookingsForYou = await bookingDetailByOperator.find({ operatorId });
+        
+        if (allBookingsForYou.length === 0) {
+            return res.status(404).json({ error: "No booking for you!" });
+        }
+        
+        const updatedBookingDetail = await Promise.all(
+            allBookingsForYou.map(async booking => {
+                const correspondingCustomer = await customer.findOne({ id: booking.customerId });
+                return {
+                    bookingDetails:booking.toObject(),
+                    customerDetatls:correspondingCustomer.toObject()
+                };
+            })
+        );
+        
+        res.status(200).json(updatedBookingDetail);
+    } catch (err) {
+        // Handle any errors that occur during the process
+        return res.status(500).json({ error: err.message });
+    }
+};
 
 /* confirm the booking */
 const confirmBooking = async (req, res) => {
@@ -598,6 +688,17 @@ const confirmBooking = async (req, res) => {
 
         if (findTheBooking.status === "Rejected") {
             return res.status(400).json({ error: "This Booking is already rejected!" });
+        }
+
+        const findTheOperatorBooking = await bookingDetailByOperator.findOne({ id: bookingId });
+
+        if(findTheOperatorBooking){
+            // Update booking status to Completed
+            await bookingDetailByOperator.findOneAndUpdate(
+                { id: bookingId },
+                { $set: { status: "Completed" } },
+                { new: true }
+            );
         }
         
         // Update booking status to Completed
@@ -625,7 +726,7 @@ const confirmBooking = async (req, res) => {
             html: `
             <p>Your Booking has been confirmed!</p>
             <p>Booking ID: ${updatedBooking.id}</p>
-            <p>Status: ${updatedBooking.status}</p>
+            <p>Use the link to pay: https://stripe.com/</p>
             `
         };
 
@@ -655,6 +756,17 @@ const rejectBooking = async (req, res) => {
 
         if (findTheBooking.status === "Rejected") {
             return res.status(400).json({ error: "This Booking is already rejected!" });
+        }
+
+        const findTheOperatorBooking = await bookingDetailByOperator.findOne({ id: bookingId });
+
+        if(findTheOperatorBooking){
+            // Update booking status to Completed
+            await bookingDetailByOperator.findOneAndUpdate(
+                { id: bookingId },
+                { $set: { status: "Rejected" } },
+                { new: true }
+            );
         }
         
         // Update booking status to Completed
@@ -916,7 +1028,9 @@ module.exports = {
     getAllCreatedTo,
     findAlreadyBooking,
     createBooking,
+    createBookingByOperatorForCustomer,
     getAllBookings,
+    getAllBookingsOfOperator,
     confirmBooking,
     rejectBooking,
     getAllBookingsCustomer,
