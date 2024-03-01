@@ -319,8 +319,10 @@ const Home = () => {
                                         <div className="form-with-labels book--form">
                                             <div className="form-group">
                                                 <input type="text" name="from" placeholder="Search Pickup Location..."
-                                                    className="booking-input" value={selectedLocation}
-                                                    onChange={handleInputChange} required />
+                                                    className="booking-input" 
+                                                    value={selectedLocation}
+                                                    onChange={handleInputChange} 
+                                                    required />
                                                 <span className="fa fa-search"></span>
 
                                                 <div className='search-result-data-area custom'>
@@ -338,7 +340,9 @@ const Home = () => {
                                             <div className='book-form-line'></div>
 
                                             <div className="form-group">
-                                                <input type="text" name="to" placeholder="Search Drop Location..." className="booking-input" value={selectedToLocation} onChange={handleToInputChange} required />
+                                                <input type="text" name="to" placeholder="Search Drop Location..." className="booking-input" 
+                                                value={selectedToLocation}
+                                                 onChange={handleToInputChange} required />
                                                 <span className="fa fa-search"></span>
 
                                                 <div className='search-result-data-area custom'>
@@ -355,7 +359,9 @@ const Home = () => {
                                             </div>
                                         </div>
                                         <button type='button' className='btn btn-lg btn-yellow book--submit-btn aligncenter'
-                                            onClick={handleRouteDetail} disabled={!(selectedLocation && selectedToLocation)}>
+                                            onClick={handleRouteDetail} 
+                                            disabled={!(selectedLocation && selectedToLocation)}
+                                            >
                                             SUBMIT
                                         </button>
                                     </form>

@@ -47,6 +47,165 @@ const Dashboard = () => {
     }
     const [routeDetail, setRouteDetail] = useState(initialRouteDetail)
 
+    /* ..........operator booking ............*/
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [toLocations, setToLocations] = useState([]);
+    const [fromLocations, setFromLocations] = useState([]);
+
+    const [filteredLocations, setFilteredLocations] = useState([]);
+    const [selectedLocation, setSelectedLocation] = useState('');
+
+    const [filteredToLocations, setFilteredToLocations] = useState([]);
+    const [selectedToLocation, setSelectedToLocation] = useState('');
+
+    const [driverRouteDetail, setDriverRouteDetail] = useState([]);
+    const [searching, setSearching] = useState(true);
+    const [showDateAndTime, setShowDateAndTime] = useState(false);
+
+    const [extractedDate, setExtractedDate] = useState('');
+    const [extractedTime, setExtractedTime] = useState('');
+    const [pickUpLocation, setPickUpLocation] = useState("");
+    const [customerEmail, setCustomerEmail] = useState("");
+    const [customerPhoneNum, setCustomerPhoneNum] = useState("");
+    const [to, setTo] = useState("");
+    const [from, setFrom] = useState("");
+    const [driverId, setDriverId] = useState("");
+    const [money, setMoney] = useState("");
+    const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+    const [bookingButtonStatus, setBookingButtonStatus] = useState(false);
+    const [modalIsOpen, setIsOpen] = React.useState(false);
+
+    const handleChange = date => {
+        setSelectedDate(date);
+    };
+
+    useEffect(() => {
+        const dateTime = new Date(selectedDate);
+        const extractedDate = dateTime.toDateString(); // Extracting date
+        const extractedTime = dateTime.toLocaleTimeString(); // Extracting time
+
+        setExtractedDate(extractedDate);
+        setExtractedTime(extractedTime);
+    }, [selectedDate]);
+
+    const handleFromInputChange = (event) => {
+        const inputValue = event.target.value;
+        if (inputValue) {
+            setSelectedLocation(inputValue); // Update selectedLocation state
+            const filtered = fromLocations.filter(location =>
+                location.toLowerCase().includes(inputValue.toLowerCase())
+            );
+            setFilteredLocations(filtered);
+        } else {
+            setSelectedLocation("")
+            setFilteredLocations([])
+        }
+
+    };
+
+    // Function to handle click on filtered location
+    const handleLocationClick = (location) => {
+        setSelectedLocation(location);
+        setFilteredLocations([]);
+    };
+
+    const handleToInputChange = (event) => {
+        const inputValue = event.target.value;
+        if (inputValue) {
+            setSelectedToLocation(inputValue); // Update selectedLocation state
+            const filtered = toLocations.filter(location =>
+                location.toLowerCase().includes(inputValue.toLowerCase())
+            );
+            setFilteredToLocations(filtered);
+        } else {
+            setSelectedToLocation("")
+            setFilteredToLocations([])
+        }
+
+    };
+
+    // Function to handle click on filtered location
+    const handleToLocationClick = (location) => {
+        setSelectedToLocation(location);
+        setFilteredToLocations([]);
+    };
+
+    useEffect(() => {
+
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/find-from-routes`)
+            .then(res => {
+                console.log(res.data)
+                setFromLocations(res.data);
+            })
+            .catch(err => {
+                console.log(err)
+            })
+
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/find-to-routes`)
+            .then(res => {
+                console.log(res.data)
+                setToLocations(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
+    }, [])
+
+    const handleRouteDetail = () => {
+        setIsOpen(true);
+        setSearching(true);
+        setDriverRouteDetail([]);
+        setSelectedRowIndex(null);
+        setDriverId("");
+        axios.get(`${process.env.REACT_APP_SERVER_URL}/route-detail/${selectedLocation}/${selectedToLocation}`)
+            .then(res => {
+                console.log(res.data);
+                setDriverRouteDetail(res.data);
+                setSearching(false)
+            })
+            .catch(err => {
+                console.log(err)
+                setSearching(false)
+            })
+    }
+
+    const handleBooking = async () => {
+        const bookingData = {
+            driverId,
+            time: extractedTime,
+            date: extractedDate,
+            operatorId: user.id,
+            from,
+            to,
+            money,
+            pickUpLocation,
+            customerEmail, 
+            customerPhoneNum
+        };
+    
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/create-new-booking-by-operator`, bookingData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: 'application/json'
+                }
+            });
+    
+            console.log(response.data);
+            showSuccessMessage("Booking Notification sent to Driver");
+    
+            const bookings = await GetBookings(`booking-of-operator/${user.id}`);
+            console.log(bookings);
+            setAllBookings(bookings);
+        } catch (error) {
+            console.log(error);
+            showErrorMessage(error.response.data.error);
+        }
+    };
+    
+    /*........................................................... */
+
     function closeViewModal() {
         setViewIsOpen(false);
     }
@@ -57,6 +216,17 @@ const Dashboard = () => {
 
     function closeBookModal() {
         setBookingIsOpen(false);
+        setDriverRouteDetail([]);
+        setSelectedLocation("");
+        setSelectedToLocation("");
+        setIsOpen(false);
+        setShowDateAndTime(false);
+        setCustomerEmail("");
+        setCustomerPhoneNum("");
+        setPickUpLocation("");
+        setSelectedDate(null);
+        setDriverId("");
+        setSelectedRowIndex(null);
     }
 
     const handleDelete = (id) => {
@@ -260,6 +430,10 @@ const Dashboard = () => {
                     setAllBookings(bookings)
                 } else if (user?.role === "Customer") {
                     const bookings = await GetBookings(`bookings-customer/${user.id}`);
+                    console.log(bookings);
+                    setAllBookings(bookings)
+                } else if (user?.role === "Operator") {
+                    const bookings = await GetBookings(`booking-of-operator/${user.id}`);
                     console.log(bookings);
                     setAllBookings(bookings)
                 } else if (user?.role === "Admin") {
@@ -583,7 +757,7 @@ const Dashboard = () => {
                                     </div>
                                 </div>
 
-                                <hr className='lg margin-0' />
+                                {/* <hr className='lg margin-0' />
 
                                 <div className="col-sm-12 login-form-area mt-4 custom-top-radius custom-bottom-radius">
                                     <div className="">
@@ -624,7 +798,7 @@ const Dashboard = () => {
                                                                         <td>Jaffna</td>
                                                                         <td>1000</td>
                                                                         <td className='text-center'>
-                                                                            {/* <span className="booking-status pending">Pending</span> */}
+                                                                            <span className="booking-status pending">Pending</span>
                                                                             <span className="booking-status completed">Completed</span>
                                                                         </td>
                                                                         <td className='text-center'>
@@ -643,7 +817,7 @@ const Dashboard = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
                                 <hr className='lg margin-0' />
 
@@ -651,6 +825,12 @@ const Dashboard = () => {
                                     <div className="col-sm-12 login-form-area mt-4 custom-top-radius custom-bottom-radius">
                                         <div className="">
                                             <h4 className='text-center mb-4 margin-0 font-weight-700'>BOOKINGS</h4>
+                                            {user?.role === "Operator" && <button className='btn btn-sm btn-success'
+                                                onClick={() => setBookingIsOpen(true)}
+                                            >
+                                                <i className='fa fa-plus mr-2'></i>&nbsp;
+                                                Create Booking
+                                            </button>}
                                             <hr />
                                             <div className="row">
                                                 <div className="col-sm-12">
@@ -724,6 +904,12 @@ const Dashboard = () => {
                                     :
                                     <div className="no-data-created-area">
                                         <div className='no-data-created'>
+                                        {user?.role === "Operator" && <button className='btn btn-sm btn-success'
+                                                onClick={() => setBookingIsOpen(true)}
+                                            >
+                                                <i className='fa fa-plus mr-2'></i>&nbsp;
+                                                Create Booking
+                                            </button>}
                                             <div className='no-data-text'>No Bookings Found!</div>
                                         </div>
                                     </div>
@@ -1191,42 +1377,57 @@ const Dashboard = () => {
                                     <div className="col-lg-5">
                                         <div className="form-group">
                                             <label htmlFor="" className='form-label absolute text-orange'>From&nbsp;<span className='form-required'>*</span></label>
-                                            <input type="text" className='form-control dark-theme' placeholder='From' />
+                                            <input type="text" className='form-control dark-theme' placeholder='From'
+                                            value={selectedLocation}
+                                            onChange={handleFromInputChange} />
 
                                             <div className='search-result-data-area custom'>
-                                                <div className='search-result-data'>Location 1</div>
-                                                <div className='search-result-data'>Location 1</div>
-                                                <div className='search-result-data'>Location 1</div>
-                                                <div className='search-result-data'>Location 1</div>
+                                            {filteredLocations.map((location, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className='search-result-data'
+                                                            onClick={() => handleLocationClick(location)}>
+                                                            {location}
+                                                        </div>
+                                                    ))}
                                             </div>
 
-                                            <small className='form-required'>This field is required</small>
+                                            {!selectedLocation &&<small className='form-required'>This field is required</small>}
                                         </div>
                                     </div>
                                     <div className="col-lg-5">
                                         <div className="form-group">
                                             <label htmlFor="" className='form-label absolute text-orange'>To&nbsp;<span className='form-required'>*</span></label>
-                                            <input type="text" className='form-control dark-theme' placeholder='To' />
+                                            <input type="text" className='form-control dark-theme' placeholder='To' 
+                                            value={selectedToLocation}
+                                            onChange={handleToInputChange}/>
 
                                             <div className='search-result-data-area custom'>
-                                                <div className='search-result-data'>Location 1</div>
-                                                <div className='search-result-data'>Location 1</div>
-                                                <div className='search-result-data'>Location 1</div>
-                                                <div className='search-result-data'>Location 1</div>
+                                            {filteredToLocations.map((location, index) => (
+                                                        <div
+                                                            key={index}
+                                                            className='search-result-data'
+                                                            onClick={() => handleToLocationClick(location)}
+                                                        >
+                                                            {location}
+                                                        </div>
+                                                    ))}
                                             </div>
 
-                                            <small className='form-required'>This field is required</small>
+                                            {!selectedToLocation && <small className='form-required'>This field is required</small>}
                                         </div>
                                     </div>
                                     <div className="col-lg-2">
                                         <div className="form-group">
-                                            <button type="button" class="btn btn-success modal-btn w-100 btn-margin">Submit</button>
+                                            <button type="button" class="btn btn-success modal-btn w-100 btn-margin"
+                                            onClick={handleRouteDetail} 
+                                            disabled={!(selectedLocation && selectedToLocation)}>Submit</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="inner-two-col">
+                            {modalIsOpen && <div class="inner-two-col">
                                 <div class="text-page">
                                     <div className="book-table-area table-responsive">
                                         <table className='table margin-bottom-0'>
@@ -1240,49 +1441,62 @@ const Dashboard = () => {
                                                     <th className='text-center'>Select</th>
                                                 </tr>
                                             </thead>
-
-                                            <tbody>
-                                                <tr>
-                                                    <td>1.</td>
-                                                    <td>Driver</td>
-                                                    <td>044011511</td>
-                                                    <td>350</td>
-
-                                                    <td className='verical-align-middle'>
-                                                        <div className="current-rating">
-                                                            <i className='fa fa-star rate'></i>
-                                                            <i className='fa fa-star'></i>
-                                                            <i className='fa fa-star'></i>
-                                                            <i className='fa fa-star'></i>
-                                                            <i className='fa fa-star'></i>
-                                                        </div>
-                                                    </td>
-
-                                                    <td className='text-center'>
-                                                        <button
-                                                            className='btn modal-btn view-btn btn-success'
-                                                        >
-                                                            <i className='fa fa-check mr-2'>&nbsp;Select</i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
+                                            
+                                            {driverRouteDetail.length > 0 ?
+                                                <tbody>
+                                                    {driverRouteDetail.map((rout, index) => (
+                                                        <tr key={index}>
+                                                            <td>{index + 1}.</td>
+                                                            <td>{rout?.driver?.userName}</td>
+                                                            <td>{rout?.driver?.phoneNum}</td>
+                                                            <td>{rout?.money}</td>
+        
+                                                            <td className='verical-align-middle'>
+                                                                <div className="current-rating">
+                                                                    {renderStars(rout?.driver?.rating)}
+                                                                </div>
+                                                            </td>
+        
+                                                            
+                                                                <td className='text-center'>
+                                                                    <button
+                                                                        className='btn modal-btn view-btn btn-success'
+                                                                        onClick={() => {
+                                                                            setSelectedRowIndex(index);
+                                                                            setShowDateAndTime(true);
+                                                                            setDriverId(rout?.driver?.id);
+                                                                            setTo(rout?.to);
+                                                                            setFrom(rout?.from);
+                                                                            setMoney(rout?.money);
+                                                                        }}
+                                                                        disabled={selectedRowIndex === index}
+                                                                    >
+                                                                        <i className='fa fa-check mr-2'>&nbsp;{selectedRowIndex === index ? "Selected" : "Select"}</i>
+                                                                    </button>
+                                                                </td>
+                                                            
+                                                        </tr>
+                                                    ))}
+                                                </tbody> :
                                             <tr>
-                                                <td colSpan={6} className='text-center text-secondary'>No Driver Details!</td>
-                                            </tr>
+                                                <td colSpan={6} className='text-center text-secondary'>{searching ? "Searching..." : "No Driver Details!"}</td>
+                                            </tr>}
                                         </table>
                                     </div>
                                 </div>
-                            </div>
+                            </div>}
 
+                            {showDateAndTime &&
                             <form action="">
                                 <div className='book-form-area'>
                                     <div className="row">
                                         <div className="col-12 col-lg-6">
                                             <div className="form-group">
                                                 <label htmlFor="" className='form-label absolute text-orange'>Pickup Location&nbsp;<span className='form-required'>*</span></label>
-                                                <input type="text" className='form-control dark-theme' placeholder='Enter your pickup location' />
-                                                <small className='form-required'>This field is required</small>
+                                                <input type="text" className='form-control dark-theme' placeholder='Enter your pickup location'
+                                                value={pickUpLocation}
+                                                onChange={(e) => setPickUpLocation(e.target.value)} />
+                                                {!pickUpLocation && <small className='form-required'>This field is required</small>}
                                             </div>
                                         </div>
 
@@ -1293,48 +1507,56 @@ const Dashboard = () => {
                                                     <DatePicker
                                                         className='form-control dark-theme'
                                                         placeholderText='Select Date and Time'
+                                                        selected={selectedDate}
+                                                        onChange={handleChange}
                                                         showTimeSelect
                                                         dateFormat="MMMM d, yyyy h:mm aa"
                                                     />
                                                 </div>
-                                                <small className='form-required'>This field is required</small>
+                                                {!selectedDate && <small className='form-required'>This field is required</small>}
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="book-form-title">Customer Detail</div>
                                     <div className="row">
-                                        <div className="col-12 col-lg-4">
+                                        {/* <div className="col-12 col-lg-4">
                                             <div className="form-group">
                                                 <label htmlFor="" className='form-label absolute text-orange'>Name</label>
                                                 <input type="text" className='form-control dark-theme' placeholder='Enter name' />
                                             </div>
-                                        </div>
+                                        </div> */}
 
                                         <div className="col-12 col-lg-4">
                                             <div className="form-group">
                                                 <label htmlFor="" className='form-label absolute text-orange'>Email&nbsp;<span className='form-required'>*</span></label>
-                                                <input type="email" className='form-control dark-theme' placeholder='Enter email' />
-                                                <small className='form-required'>This field is required</small>
+                                                <input type="email" className='form-control dark-theme' placeholder='Enter email' 
+                                                value={customerEmail}
+                                                onChange={(e) => setCustomerEmail(e.target.value)}/>
+                                                {!customerEmail && <small className='form-required'>This field is required</small>}
                                             </div>
                                         </div>
 
                                         <div className="col-12 col-lg-4">
                                             <div className="form-group">
                                                 <label htmlFor="" className='form-label absolute text-orange'>Mobile&nbsp;<span className='form-required'>*</span></label>
-                                                <input type="text" className='form-control dark-theme' placeholder='Enter mobile no.' />
-                                                <small className='form-required'>This field is required</small>
+                                                <input type="number" className='form-control dark-theme' placeholder='Enter mobile no.' 
+                                                value={customerPhoneNum}
+                                                onChange={(e) => setCustomerPhoneNum(e.target.value)}/>
+                                                {!customerPhoneNum && <small className='form-required'>This field is required</small>}
                                             </div>
                                         </div>
 
                                     </div>
                                 </div>
-                            </form>
+                            </form>}
                         </div>
 
                         <div className="modal--footer">
                             <button type="button" class="btn btn-secondary modal-btn" onClick={closeBookModal}>Close</button>
-                            <button type="button" class="btn btn-orange modal-btn">Book</button>
+                            <button type="button" class="btn btn-orange modal-btn"
+                            onClick={() => handleBooking()}
+                            disabled={driverRouteDetail.length === 0 || selectedDate === null || pickUpLocation === "" || customerEmail === "" || customerPhoneNum === "" ||!showDateAndTime || !driverId}>Book</button>
                         </div>
                     </Modal>
                     {/*  */}

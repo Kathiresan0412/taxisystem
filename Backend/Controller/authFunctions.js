@@ -611,7 +611,10 @@ const createBookingByOperatorForCustomer = async (req, res) => {
             status:"Pending",
             pickUpLocation
         });
-        return res.status(201).json(newBookingDetail);
+
+        await newBookingDetail.save();
+
+        return res.status(201).json({message:"Booked Successful, Notificatio sent to driver"});
     } catch (err) {
         // Handle any errors that occur during the process
         return res.status(500).json({ error: err.message });
@@ -658,9 +661,11 @@ const getAllBookingsOfOperator = async (req, res) => {
         const updatedBookingDetail = await Promise.all(
             allBookingsForYou.map(async booking => {
                 const correspondingCustomer = await customer.findOne({ id: booking.customerId });
+                const correspondingDriver = await driver.findOne({ id: booking.driverId });
                 return {
                     bookingDetails:booking.toObject(),
-                    customerDetatls:correspondingCustomer.toObject()
+                    customerDetatls:(correspondingCustomer && correspondingCustomer.toObject()),
+                    driverDetails:(correspondingDriver && correspondingDriver.toObject())
                 };
             })
         );

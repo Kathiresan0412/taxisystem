@@ -91,7 +91,7 @@ router.post("/create-new-booking-by-operator", employeeAuth, createBookingByOper
 router.get("/booking/:driverId", employeeAuth, getAllBookings);
 
 //find all booking of operatorId
-router.get("/booking/:operatorId", employeeAuth, getAllBookingsOfOperator);
+router.get("/booking-of-operator/:operatorId", employeeAuth, getAllBookingsOfOperator);
 
 //confirm the booking
 router.patch("/confirm-booking/:bookingId", employeeAuth, confirmBooking);
