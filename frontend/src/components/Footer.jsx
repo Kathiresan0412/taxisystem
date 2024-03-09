@@ -11,15 +11,7 @@ export const Footer = () => {
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 col-ms-6">
                             <h4>About us</h4>
-                            <p>Experience hassle-free travel with LK Taxi, your trusted online taxi booking service in Sri Lanka. Our commitment to reliability and convenience ensures seamless journeys for every passenger. Trust LK Taxi for efficient booking, professional drivers, and a comfortable ride every time.</p>
-
-                            {/* <div class="social-small social-yellow">
-                                <a href="#" class="fa fa-twitter"></a>
-                                <a href="#" class="fa fa-facebook"></a>
-                                <a href="#" class="fa fa-instagram"></a>
-                                <a href="#" class="fa fa-google-plus"></a>
-                                <a href="#" class="fa fa-pinterest"></a>
-                            </div> */}
+                            <p>Experience hassle-free travel with City Taxi, your trusted online taxi booking service in Sri Lanka. Our commitment to reliability and convenience ensures seamless journeys for every passenger. Trust City Taxi for efficient booking, professional drivers, and a comfortable ride every time.</p>
                         </div>
                         <div class="col-lg-5 col-md-5 hidden-md hidden-sm hidden-xs hidden-ms">
                             <h4>Explore</h4>
@@ -49,7 +41,7 @@ export const Footer = () => {
 
             <footer>
                 <div class="container">
-                    <a href="#">LK Taxi</a> {currentYear} © All Rights Reserved
+                    <a href="#">City Taxi</a> {currentYear} © All Rights Reserved
                     <a href="#" class="go-top hidden-xs hidden-ms"></a>
                 </div>
             </footer>

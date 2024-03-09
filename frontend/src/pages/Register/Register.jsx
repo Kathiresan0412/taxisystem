@@ -6,7 +6,9 @@ import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.css';
 import { useNavigate } from 'react-router-dom';
 
-const Register = () => {
+ const Register = () => {
+    const [selectedRole, setSelectedRole] = useState('');
+    const [showDropdown, setShowDropdown] = useState(true);
     const navigate = useNavigate();
     const intialCredentials = {
         email: "",
@@ -46,7 +48,7 @@ const Register = () => {
         console.log(credentials)
         console.log(process.env.REACT_APP_SERVER_URL)
         
-        axios.post(`${process.env.REACT_APP_SERVER_URL}/user-reg`, credentials)
+        axios.post(`http://localhost:3000/user-reg`, credentials)
             .then(res => {
                 console.log(res.data);
                 showSuccessMessage("Find your Login Credentials in your email")
@@ -59,53 +61,52 @@ const Register = () => {
             })
 
     }
-
+    const handleRoleChange = (event) => {
+        const { value } = event.target;
+        setSelectedRole(event.target.value)
+        setCredentials(prevCredentials => ({
+            ...prevCredentials,
+            role: value
+        }));
+        setShowDropdown(false);
+    }
+    const headerStyle = {
+        textAlign: 'center',
+        color: '#007bff', // Blue color
+        fontSize: '32px', // Larger font size
+        fontWeight: 'bold',
+        fontFamily: 'Arial, sans-serif', // Backup font family
+        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)', // Text shadow for depth
+        borderBottom: '2px solid #007bff', // Underline effect
+        paddingBottom: '10px', // Space below the header
+        marginBottom: '20px', // Additional space at the bottom
+      };
     return (
         <>
             <Layout />
-            <section className="breadcrumb-area relative about-banner" id="home">
-                <div className="overlay overlay-bg"></div>
-                <div className="container">
-                    <div className="row d-flex align-items-center justify-content-center">
-                        <div className="about-content col-lg-12">
-                            <h3 className="text-white">
-                                Register
-                            </h3>
-                            <p className="text-white link-nav"><a href="/">Home </a> / <span className="lnr lnr-arrow-right"></span>  <span className='current-page'>Register</span></p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <hr className="lg margin-0" />
-
-            <section id="car-block" className='login-section section-gap'>
+         
                 <div className="container">
                     <div className="login-bg-area">
                         <div className="row mx-auto">
                             <div className="col-12 col-md-6 col-lg-6 login-form-area">
-                                <h4 className='aligncenter login-head'>REGISTER</h4>
-                                <hr />
+                            <h4 style={headerStyle}>
+                            <a className="loo" href="#">
+                                <img src="./images/Taxilogo.png" alt="city" />
+                            </a>
+                                {selectedRole} Registration </h4>
+                           
                                 <form class="form login-form">
-                                    <div className="form-group">
-                                        <label htmlFor="role" className='log-label'>Select Role</label>
-
-                                        <div className="radio-inputs">
-                                            <label className="radio">
-                                                <input type="radio" name="role" value="Customer"
-                                                    onChange={handleInputChange} />
-                                                <span className="name">Customer</span>
-                                            </label>
-
-                                            <label className="radio">
-                                                <input type="radio" name="role" value="Driver"
-                                                    onChange={handleInputChange} />
-                                                <span className="name">Driver</span>
-                                            </label>
-                                        </div>
+                                <div className="form-group">
+                                        <label className='log-label'>User Login Type</label>
+                                        <select name="role" value={credentials.role} 
+                                         onChange={handleRoleChange} className="form-control"  style={{ borderColor: "#FFC61A" }}>
+                                            <option value="">Select a role</option>
+                                            <option name="role" value="Customer" >Customer</option>
+                                            <option name="role" value="Driver">Driver</option>
+                                        </select>
                                     </div>
 
-                                    <hr className='lg custom-hr-margin' />
+             
 
                                     <div className="form-group">
                                         <label htmlFor="email" className='log-label'>E-mail</label>
@@ -132,11 +133,10 @@ const Register = () => {
                         </div>
                     </div>
                 </div>
-            </section>
+  
 
             <Footer />
         </>
     )
 }
-
 export default Register;

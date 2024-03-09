@@ -31,12 +31,12 @@ const Home = () => {
                     <div className="row">
                         <div className="col-md-7">
                             <h4 className="yellow">About Us</h4>
-                            <h2 className="h1 margin-0">About LK Taxi</h2>
+                            <h2 className="h1 margin-0">About City Taxi</h2>
                         </div>
                         <div className="col-md-6">
                             <h6 className='margin-top-0'>Your Trusted Partner in Transportation</h6>
                             <p>
-                            At LK Taxi, we pride ourselves on being the premier online taxi booking company in Sri Lanka, dedicated to providing top-notch transportation services tailored to our customers' needs. With a focus on reliability, convenience, and customer satisfaction, we strive to make every journey with us a seamless and enjoyable experience. From our easy-to-use booking platform to our diverse fleet of vehicles and highly-trained drivers, we are committed to ensuring that our passengers reach their destinations safely and comfortably. With LK Taxi, you can trust us to deliver exceptional service and peace of mind every step of the way.</p>
+                            At City Taxi, we pride ourselves on being the premier online taxi booking company in Sri Lanka, dedicated to providing top-notch transportation services tailored to our customers' needs. With a focus on reliability, convenience, and customer satisfaction, we strive to make every journey with us a seamless and enjoyable experience. From our easy-to-use booking platform to our diverse fleet of vehicles and highly-trained drivers, we are committed to ensuring that our passengers reach their destinations safely and comfortably. With City Taxi, you can trust us to deliver exceptional service and peace of mind every step of the way.</p>
 
                             <ul className="check two-col strong">
                                 <li>Efficient Booking</li>
@@ -59,9 +59,9 @@ const Home = () => {
                     <div className="overlay overlay-bg"></div>
                     <div className="row align-items-center section-gap">
                         <div className="col-lg-12">
-                            <h2 className='text-center'>LK Taxi: Your Trusted Travel Companion in Sri Lanka</h2>
+                            <h2 className='text-center'>City Taxi: Your Trusted Travel Companion in Sri Lanka</h2>
                             <p className='text-center'>
-                                Experience seamless transportation solutions with LK Taxi, the premier online taxi booking platform in Sri Lanka. Whether you're exploring the city, heading to the airport, or booking a hotel, trust LK Taxi for reliable service, trained drivers, and hassle-free travel experiences tailored to your comfort and convenience. Book your ride today and discover the ultimate in travel ease with LK Taxi.
+                                Experience seamless transportation solutions with City Taxi, the premier online taxi booking platform in Sri Lanka. Whether you're exploring the city, heading to the airport, or booking a hotel, trust City Taxi for reliable service, trained drivers, and hassle-free travel experiences tailored to your comfort and convenience. Book your ride today and discover the ultimate in travel ease with City Taxi.
                             </p>
                         </div>
                     </div>

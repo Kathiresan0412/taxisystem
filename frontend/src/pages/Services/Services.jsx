@@ -31,22 +31,22 @@ const Services = () => {
                         <div className="col-md-3 col-sm-6 col-ms-6 matchHeight">
                             <div className="image"><img src="./images/_services-1.png" alt="Service" /></div>
                             <h5>Rapid city transfer</h5>
-                            <p>Get to your destination swiftly with LK Taxi's rapid city transfer service, ensuring you make the most of your time in Sri Lanka.</p>
+                            <p>Get to your destination swiftly with City Taxi's rapid city transfer service, ensuring you make the most of your time in Sri Lanka.</p>
                         </div>
                         <div className="col-md-3 col-sm-6 col-ms-6 matchHeight">
                             <div className="image"><img src="./images/_services-2.png" alt="Service" /></div>
                             <h5>Booking a hotel</h5>
-                            <p>Simplify your travel arrangements by booking your accommodation through LK Taxi, guaranteeing a comfortable stay at your chosen hotel.</p>
+                            <p>Simplify your travel arrangements by booking your accommodation through City Taxi, guaranteeing a comfortable stay at your chosen hotel.</p>
                         </div>
                         <div className="col-md-3 col-sm-6 col-ms-6 matchHeight">
                             <div className="image"><img src="./images/_services-3.png" alt="Service" /></div>
                             <h5>Airport transfer</h5>
-                            <p>Start or end your journey hassle-free with LK Taxi's reliable airport transfer service, ensuring punctuality and comfort for your travels.</p>
+                            <p>Start or end your journey hassle-free with City Taxi's reliable airport transfer service, ensuring punctuality and comfort for your travels.</p>
                         </div>
                         <div className="col-md-3 col-sm-6 col-ms-6 matchHeight">
                             <div className="image"><img src="./images/_services-4.png" alt="Service" /></div>
                             <h5>Baggage transport</h5>
-                            <p>Trust LK Taxi to safely transport your luggage to your destination, ensuring a seamless travel experience without the burden of carrying heavy bags.</p>
+                            <p>Trust City Taxi to safely transport your luggage to your destination, ensuring a seamless travel experience without the burden of carrying heavy bags.</p>
                         </div>
                     </div>
                 </div>
@@ -57,9 +57,9 @@ const Services = () => {
             <section className="image-gallery-area section-gap">
                 <div className="container">
                     <div className="row section-title feature-title-section">
-                        <h2>Explore the Ultimate Convenience of <span>LK Taxi</span>:</h2>
+                        <h2>Explore the Ultimate Convenience of <span>City Taxi</span>:</h2>
                         <h4>Your Go-To Online Taxi Booking Platform in Sri Lanka</h4>
-                        <p>Welcome to LK Taxi, your premier choice for hassle-free and efficient transportation solutions across Sri Lanka. With our user-friendly online platform, we've revolutionized the way you book taxis, ensuring a seamless experience from start to finish.</p>
+                        <p>Welcome to City Taxi, your premier choice for hassle-free and efficient transportation solutions across Sri Lanka. With our user-friendly online platform, we've revolutionized the way you book taxis, ensuring a seamless experience from start to finish.</p>
                     </div>
                     <div className="row feature-content-section">
                         <div className="col-lg-4 single-gallery">
@@ -67,7 +67,7 @@ const Services = () => {
                                 <div className="custom-hr"></div>
                                 <h3>Effortless Booking</h3>
                                 <p>
-                                    Say goodbye to long waiting times and frustrating phone calls. With LK Taxi, you can book your ride in just a few clicks from the comfort of your home or while on the go.
+                                    Say goodbye to long waiting times and frustrating phone calls. With City Taxi, you can book your ride in just a few clicks from the comfort of your home or while on the go.
                                 </p>
                             </div>
 
@@ -123,9 +123,9 @@ const Services = () => {
                     <div className="overlay overlay-bg"></div>
                     <div className="row align-items-center section-gap">
                         <div className="col-lg-12">
-                            <h2 className='text-center'>LK Taxi: Your Trusted Travel Companion in Sri Lanka</h2>
+                            <h2 className='text-center'>City Taxi: Your Trusted Travel Companion in Sri Lanka</h2>
                             <p className='text-center'>
-                                Experience seamless transportation solutions with LK Taxi, the premier online taxi booking platform in Sri Lanka. Whether you're exploring the city, heading to the airport, or booking a hotel, trust LK Taxi for reliable service, trained drivers, and hassle-free travel experiences tailored to your comfort and convenience. Book your ride today and discover the ultimate in travel ease with LK Taxi.
+                                Experience seamless transportation solutions with City Taxi, the premier online taxi booking platform in Sri Lanka. Whether you're exploring the city, heading to the airport, or booking a hotel, trust City Taxi for reliable service, trained drivers, and hassle-free travel experiences tailored to your comfort and convenience. Book your ride today and discover the ultimate in travel ease with City Taxi.
                             </p>
                         </div>
                     </div>

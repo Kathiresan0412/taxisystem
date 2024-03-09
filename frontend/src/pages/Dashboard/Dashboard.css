@@ -1,7 +1,35 @@
+/* .table-container {
+    margin-top: 20px;
+  }
+  
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  th, td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+
+  }
+  
+  th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  tr:hover {
+    background-color: #dddddd;
+  } */
 .user-icon {
     width: 120px;
     height: 120px;
-    border-radius: 50%;
+    border-radius: 10%;
     background-color: #DDD;
     flex-shrink: 0;
     display: flex;
@@ -9,7 +37,25 @@
     justify-content: center;
 
 }
-
+.tab-buttons {
+    display: flex;
+  }
+  
+  .tab-buttons button {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  
+  .tab-buttons button.active {
+    background-color: #ccc;
+  }
+  
+  .tab-content {
+    margin-top: 20px;
+  }
 .user-icon i {
     font-size: 70px;
     color: #FFC61A;
@@ -20,7 +66,7 @@
 }
 
 .booking-status {
-    border-radius: 50px;
+    border-radius: 7px;
     font-size: 13px;
     padding: 6px 20px;
     font-weight: 500;
@@ -48,8 +94,8 @@
     display: flex;
     gap: 2px;
     flex-shrink: 0;
-    background-color: #797979;
-    border-radius: 50px;
+    background-color: #ffffff;
+    border-radius: 5px;
     padding: 5px;
     justify-content: center;
 }
@@ -340,8 +386,8 @@
 }
 
 .modal--content {
-    background-color: #ececec !important;
-    border-radius: 10px !important;
+    background-color: #ffffff !important;
+    border-radius: 5px !important;
     padding: 30px;
 }
 
@@ -356,7 +402,7 @@
 }
 
 .login-form-area h6 {
-    font-size: 15px !important;
+  
 }
 
 .custom-bottom-radius {

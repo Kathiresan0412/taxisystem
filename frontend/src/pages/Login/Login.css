@@ -5,7 +5,7 @@
 }
 
 .login-form-area {
-    background-color: #e9e9e9;
+    background-color: #ffffff;
     padding: 50px;
     border-radius: 10px;
 }
@@ -106,7 +106,7 @@
 
 .dont-acc-text a {
     font-weight: 600;
-    color: #FFC61A !important;
+    color: #000000 !important;
 }
 
 .dont-acc-text a:hover {
@@ -154,19 +154,19 @@ input[type="number"] {
 
 
 .login-form {
-    border: dashed 2px #FFC61A;
+    border: dashed 2px #000000;
     border-radius: 10px !important;
-    background-color: #eaeaea;
+    background-color: #ffffff;
 }
 
 .login-form input {
     border-radius: 10px !important;
     border-bottom-width: 3px !important;
-    border-color: #FFC61A !important;
+    border-color: #000000 !important;
 }
 
 .login-form input::placeholder {
-    color: #a3a3a3 !important;
+    color: #ffffff !important;
 }
 
 @media (max-width: 991px) {

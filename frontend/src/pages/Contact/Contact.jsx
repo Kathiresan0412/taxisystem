@@ -83,7 +83,7 @@ const Contact = () => {
                                 <div class="col-lg-12 col-md-12 col-sm-6">
 
                                     <h2 class="spanned">Contact Us</h2>
-                                    <p>Feel free to reach out to us at LK Taxi with any questions, concerns, or feedback you may have. Our dedicated team is here to assist you and ensure your experience with us is as smooth as possible. Whether you need assistance with booking a ride, have inquiries about our services, or require support during your journey, we're always ready to help.</p>
+                                    <p>Feel free to reach out to us at City Taxi with any questions, concerns, or feedback you may have. Our dedicated team is here to assist you and ensure your experience with us is as smooth as possible. Whether you need assistance with booking a ride, have inquiries about our services, or require support during your journey, we're always ready to help.</p>
                                     <p>You can contact us via phone, email, or by filling out the contact form below. We strive to respond to all inquiries promptly and provide the assistance you need. Your satisfaction is our priority, and we look forward to hearing from you.</p>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-6">

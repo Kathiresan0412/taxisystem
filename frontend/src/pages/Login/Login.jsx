@@ -7,8 +7,12 @@ import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.css';
 // import { useNavigate } from "react-router-dom";
 
-
 const Login = () => {
+    const [active, setActive] = useState(false);
+    const [selectedRole, setSelectedRole] = useState('');
+    const [showDropdown, setShowDropdown] = useState(true);
+
+
     // const navigate = useNavigate()
     const intialCredentials = {
         userName: "",
@@ -28,7 +32,16 @@ const Login = () => {
         });
     }
 
-    //for show error message for payment
+    const handleRoleChange = (event) => {
+
+        const { value } = event.target;
+        setSelectedRole(event.target.value)
+        setCredentials(prevCredentials => ({
+            ...prevCredentials,
+            role: value
+        }));
+        setShowDropdown(false);
+    };
     function showErrorMessage(message) {
         Swal.fire({
             title: 'Error!',
@@ -42,10 +55,13 @@ const Login = () => {
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setCredentials({ ...credentials, [name]: value });
+
     }
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(credentials)
+
+        // credentials.role='Customer';
+        console.log(credentials);
         let endPoint;
         if (credentials.role === "Admin") {
             endPoint = "login-admin"
@@ -58,7 +74,7 @@ const Login = () => {
         }
 
         console.log(endPoint);
-        if(!(credentials.role === "")){
+        if (!(credentials.role === "")) {
             axios.post(`${process.env.REACT_APP_SERVER_URL}/${endPoint}`, credentials)
                 .then(res => {
                     console.log(res.data);
@@ -78,93 +94,72 @@ const Login = () => {
                     console.log(err)
                     showErrorMessage(err.response.data.message)
                 })
-            }else{
-                showErrorMessage("Select User Role")
-            }
+        } else {
+            showErrorMessage("Select User Role")
+        }
     }
 
+    const headerStyle = {
+        textAlign: 'center',
+        color: 'black', // Blue color
+        fontSize: '32px', // Larger font size
+        fontWeight: 'bold',
+        fontFamily: 'Arial, sans-serif', // Backup font family
+        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)', // Text shadow for depth
+        borderBottom: '2px solid #007bff', // Underline effect
+        paddingBottom: '10px', // Space below the header
+        marginBottom: '20px', // Additional space at the bottom
+    };
     return (
         <>
             <Layout />
-            <section className="breadcrumb-area relative about-banner" id="home">
-                <div className="overlay overlay-bg"></div>
-                <div className="container">
-                    <div className="row d-flex align-items-center justify-content-center">
-                        <div className="about-content col-lg-12">
-                            <h3 className="text-white">
-                                Login
-                            </h3>
-                            <p className="text-white link-nav"><a href="/">Home </a> / <span className="lnr lnr-arrow-right"></span>  <span className='current-page'>Login</span></p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <div className="container">
+                <div className="login-bg-area">
+                    <div className="row mx-auto">
+                        <div className="col-12 col-md-6 col-lg-6 login-form-area ">
+                            <h4 style={headerStyle}>
+                                <a className="logo" href="/">
+                                    <img src="./images/city.png" alt="city" />
+                                </a>
+                                {selectedRole} LOGIN</h4>
 
-            <hr className="lg margin-0" />
-
-            <section id="car-block" className='login-section section-gap'>
-                <div className="container">
-                    <div className="login-bg-area">
-                        <div className="row mx-auto">
-                            <div className="col-12 col-md-6 col-lg-6 login-form-area">
-                                <h4 className='aligncenter login-head'>LOGIN</h4>
-                                <hr />
-                                <form class="form login-form">
+                            <form className="form login-form">
                                 <div className="form-group">
-                                        <label htmlFor="role" className='log-label'>Select Role</label>
+                                    <label className='log-label'>User Login Type</label>
+                                    <select name="role" value={selectedRole} onChange={handleRoleChange} className="form-control" style={{ borderColor: "#FFC61A" }}>
+                                        <option value="">Select a role</option>
+                                        <option value="Admin">Admin</option>
+                                        <option value="Operator">Operator</option>
+                                        <option value="Customer">Customer</option>
+                                        <option value="Driver">Driver</option>
+                                    </select>
 
-                                        <div className="radio-inputs">
-                                            <label className="radio">
-                                                <input type="radio" name="role" value="Admin"
-                                                    onChange={handleInputChange} />
-                                                <span className="name">Admin</span>
-                                            </label>
-                                            <label className="radio">
-                                                <input type="radio" name="role" value="Operator"
-                                                    onChange={handleInputChange} />
-                                                <span className="name">Operator</span>
-                                            </label>
+                                </div>
 
-                                            <label className="radio">
-                                                <input type="radio" name="role" value="Customer"
-                                                    onChange={handleInputChange} />
-                                                <span className="name">Customer</span>
-                                            </label>
+                                <div className="form-group">
+                                    <label className='log-label'>User Name</label>
+                                    <input type="text" name="userName" className="form-control" placeholder="Enter your user name"
+                                        value={credentials.userName}
+                                        onChange={handleInputChange} />
+                                </div>
+                                <div className="form-group">
+                                    <label className='log-label'>Password</label>
+                                    <input type="password" name="password" className="form-control" placeholder="Enter your password"  autocomplete="on"
+                                        value={credentials.password}
+                                        onChange={handleInputChange} />
+                                </div>
 
-                                            <label className="radio">
-                                                <input type="radio" name="role" value="Driver"
-                                                    onChange={handleInputChange} />
-                                                <span className="name">Driver</span>
-                                            </label>
-                                        </div>
+                                <div className="text-center">
+                                    <button className='btn btn-yellow btn-lg' onClick={handleSubmit}>LOGIN</button>
+                                    <div className='dont-acc-text'>You don't have an account?,&nbsp;
+                                        <a href="/sign-up">Signup</a>
                                     </div>
-                                    <hr className='lg custom-hr-margin' />
-                                    <div className="form-group">
-                                        <label className='log-label'>User Name</label>
-                                        <input type="text" name="userName" placeholder="Enter your user name"
-                                            value={credentials.userName}
-                                            onChange={handleInputChange} />
-                                    </div>
-                                    <div className="form-group">
-                                        <label className='log-label'>Password</label>
-                                        <input type="password" name="password" placeholder="Enter your password"
-                                            value={credentials.password}
-                                            onChange={handleInputChange} />
-                                    </div>
-
-                                    <div class="aligncenter">
-                                        <button className='btn btn-yellow btn-lg' onClick={handleSubmit}>LOGIN</button>
-                                        <div className='dont-acc-text'>You don't have an account?,&nbsp;
-                                            <a href="/sign-up">Signup</a>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </section>
-
+            </div>
             <Footer />
         </>
     )

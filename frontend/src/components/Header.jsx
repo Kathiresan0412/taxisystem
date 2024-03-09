@@ -76,7 +76,7 @@ export const Header = () => {
 
     return (
 
-        <div className="navbar-gray-yellow-transparent">
+        <div className="">
             <div className="nav-wrapper" id="nav-wrapper">
                 <nav className="navbar navbar-static navbar-affix" data-spy="affix">
                     <div className="container">
@@ -89,7 +89,7 @@ export const Header = () => {
                                 <span className="icon-bar bottom-bar"></span>
                             </button>
                             <a className="logo" href="/">
-                                <img src="./images/logo-inner.png" alt="TaxiPark" />
+                                <img src="./images/Taxilogo.png" alt="city" />
                             </a>
                         </div>
                         <div id="navbar" className={`navbar-collapse ${isCollapsed ? 'collapse' : ''}`}>
